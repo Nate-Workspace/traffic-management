@@ -1,15 +1,27 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { envSchema } from "./config/env.schema";
+import { appConfig } from "./config/app.config";
+import { databaseConfig } from "./config/database";
+import { validateEnv } from "./config/env";
+import { DatabaseModule } from "./database/database.module";
 import { HealthModule } from "./modules/health/health.module";
+import { requestIdMiddleware } from "./common/middleware/request-id.middleware";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validate: (config) => envSchema.parse(config),
+      cache: true,
+      expandVariables: true,
+      load: [appConfig, databaseConfig],
+      validate: validateEnv,
     }),
+    DatabaseModule,
     HealthModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(requestIdMiddleware).forRoutes("*");
+  }
+}

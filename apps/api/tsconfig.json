@@ -12,9 +12,10 @@
       "@/*": ["src/*"],
       "@common/*": ["src/common/*"],
       "@config/*": ["src/config/*"],
+      "@database/*": ["src/database/*"],
       "@modules/*": ["src/modules/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
   "exclude": ["node_modules", "dist", "test"]
 }
