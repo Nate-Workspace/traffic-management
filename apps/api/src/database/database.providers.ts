@@ -3,6 +3,8 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import type { Provider } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DATABASE_POOL, DRIZZLE_DB } from "./database.tokens";
+import * as schema from "./schema";
+import type { Database } from "./database.types";
 
 export type DatabaseConfig = {
   url: string;
@@ -35,6 +37,6 @@ export const databaseProviders: Provider[] = [
   {
     provide: DRIZZLE_DB,
     inject: [DATABASE_POOL],
-    useFactory: (pool: Pool) => drizzle(pool),
+    useFactory: (pool: Pool) => drizzle(pool, { schema }) as Database,
   },
 ];

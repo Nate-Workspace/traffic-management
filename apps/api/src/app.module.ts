@@ -5,6 +5,8 @@ import { databaseConfig } from "./config/database";
 import { validateEnv } from "./config/env";
 import { DatabaseModule } from "./database/database.module";
 import { HealthModule } from "./modules/health/health.module";
+import { DriversModule } from "./modules/drivers/drivers.module";
+import { ViolationsModule } from "./modules/violations/violations.module";
 import { requestIdMiddleware } from "./common/middleware/request-id.middleware";
 
 @Module({
@@ -18,6 +20,8 @@ import { requestIdMiddleware } from "./common/middleware/request-id.middleware";
     }),
     DatabaseModule,
     HealthModule,
+    DriversModule,
+    ViolationsModule,
   ],
 })
 export class AppModule implements NestModule {
