@@ -44,8 +44,8 @@ export class DriversService {
 
     const orderBy = buildSort(sortBy, sortOrder, {
       createdAt: drivers.createdAt,
+      updatedAt: drivers.updatedAt,
       fullName: drivers.fullName,
-      plateNumber: drivers.plateNumber,
     });
 
     const items = await this.db
@@ -64,7 +64,7 @@ export class DriversService {
     const total = Number(countResult[0]?.count ?? 0);
 
     return {
-      items,
+      data: items,
       ...buildPaginationMeta(page, limit, total),
     };
   }

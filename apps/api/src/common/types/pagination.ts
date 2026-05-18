@@ -1,5 +1,5 @@
 export type PaginatedResult<T> = {
-  items: T[];
+  data: T[];
   page: number;
   limit: number;
   total: number;

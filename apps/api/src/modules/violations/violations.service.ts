@@ -106,7 +106,7 @@ export class ViolationsService {
     const total = Number(countResult[0]?.count ?? 0);
 
     return {
-      items,
+      data: items,
       ...buildPaginationMeta(page, limit, total),
     };
   }

@@ -4,7 +4,11 @@ import { paginationSchema } from "@common/dto/pagination.dto";
 import { searchSchema } from "@common/dto/search.dto";
 import { sortOrderSchema } from "@common/dto/sort.dto";
 
-export const driverSortFields = ["createdAt", "fullName", "plateNumber"] as const;
+export const driverSortFields = [
+  "createdAt",
+  "updatedAt",
+  "fullName",
+] as const;
 
 export const driversQuerySchema = paginationSchema
   .merge(searchSchema)

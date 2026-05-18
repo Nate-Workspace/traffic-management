@@ -19,5 +19,7 @@ export const drivers = pgTable(
     nationalIdUnique: uniqueIndex("drivers_national_id_unique").on(table.nationalId),
     nameIdx: index("drivers_full_name_idx").on(table.fullName),
     phoneIdx: index("drivers_phone_number_idx").on(table.phoneNumber),
+    createdAtIdx: index("drivers_created_at_idx").on(table.createdAt),
+    updatedAtIdx: index("drivers_updated_at_idx").on(table.updatedAt),
   }),
 );

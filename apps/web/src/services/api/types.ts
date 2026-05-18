@@ -26,7 +26,7 @@ export type ApiErrorResponse = {
 export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
 export type PaginatedResponse<T> = {
-  items: T[];
+  data: T[];
   page: number;
   limit: number;
   total: number;

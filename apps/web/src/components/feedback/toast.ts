@@ -2,7 +2,7 @@ import { notifications } from "@mantine/notifications";
 
 type ToastPayload = {
   title: string;
-  message?: string;
+  message?: string | ((error: unknown) => string);
 };
 
 export const toast = {
@@ -69,7 +69,10 @@ export const toastPromise = async <T>(
       loading: false,
       autoClose: 4000,
       title: options.error.title,
-      message: options.error.message,
+      message:
+        typeof options.error.message === "function"
+          ? options.error.message(error)
+          : options.error.message,
     });
     throw error;
   }
