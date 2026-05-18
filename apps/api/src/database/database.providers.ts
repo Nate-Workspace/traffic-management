@@ -26,11 +26,17 @@ export const databaseProviders: Provider[] = [
         throw new Error("Database configuration is missing");
       }
 
+      const url = config.url;
+      const needsSsl =
+        config.ssl ||
+        /sslmode=require|verify-full|verify-ca/i.test(url) ||
+        url.includes("neon.tech");
+
       return new Pool({
         connectionString: config.url,
         max: config.poolMax,
         idleTimeoutMillis: config.poolIdleMs,
-        ssl: config.ssl ? { rejectUnauthorized: false } : false,
+        ssl: needsSsl ? { rejectUnauthorized: false } : false,
       });
     },
   },

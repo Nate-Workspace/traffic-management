@@ -214,7 +214,16 @@ export class AnalyticsService {
   }
 
   private rangeFilter(start: Date, end: Date): SQL {
-    return and(gte(violations.violationAt, start), lte(violations.violationAt, end));
+    const condition = and(
+      gte(violations.violationAt, start),
+      lte(violations.violationAt, end),
+    );
+
+    if (!condition) {
+      throw new Error("Range filter requires bounds");
+    }
+
+    return condition;
   }
 
   private async getRepeatedOffendersCount(rangeCondition: SQL) {
