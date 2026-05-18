@@ -11,11 +11,12 @@ export const useQueryState = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const current = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
+  const search = useMemo(() => searchParams.toString(), [searchParams]);
+  const current = useMemo(() => new URLSearchParams(search), [search]);
 
   const setQuery = useCallback(
     (next: QueryState, options?: { replace?: boolean }) => {
-      const params = new URLSearchParams(current);
+      const params = new URLSearchParams(search);
 
       Object.entries(next).forEach(([key, value]) => {
         if (value === undefined || value === null || value === "") {
@@ -27,6 +28,11 @@ export const useQueryState = () => {
 
       const queryString = params.toString();
       const url = queryString.length > 0 ? `${pathname}?${queryString}` : pathname;
+      const currentUrl = search.length > 0 ? `${pathname}?${search}` : pathname;
+
+      if (url === currentUrl) {
+        return;
+      }
 
       if (options?.replace ?? true) {
         router.replace(url, { scroll: false });
@@ -34,7 +40,7 @@ export const useQueryState = () => {
         router.push(url, { scroll: false });
       }
     },
-    [current, pathname, router],
+    [search, pathname, router],
   );
 
   return {

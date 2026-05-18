@@ -2,6 +2,11 @@ import { notifications } from "@mantine/notifications";
 
 type ToastPayload = {
   title: string;
+  message?: string;
+};
+
+type ToastPromisePayload = {
+  title: string;
   message?: string | ((error: unknown) => string);
 };
 
@@ -39,7 +44,7 @@ export const toastPromise = async <T>(
   options: {
     loading: ToastPayload;
     success: ToastPayload;
-    error: ToastPayload;
+    error: ToastPromisePayload;
   },
 ) => {
   const id = notifications.show({

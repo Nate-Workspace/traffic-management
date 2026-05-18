@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { Text } from "@mantine/core";
 import { TablePagination } from "@/components/tables/table-pagination";
 import { TableEmptyState } from "@/components/tables/table-empty-state";
@@ -13,6 +14,7 @@ import { getApiErrorMessage } from "@/services/api/errors";
 import { DriversTable, type DriverSortField } from "./drivers-table";
 import { DriverDrawer } from "./driver-drawer";
 import { useDriversQuery } from "../hooks/use-drivers-query";
+import type { DriversListResponse } from "../api/drivers.api";
 import { useDriverMutations } from "../hooks/use-driver-mutations";
 import type { Driver } from "../types/driver";
 import { driversEmptyState, driversSearchEmptyState } from "../constants";
@@ -31,8 +33,15 @@ export function DriversPage() {
   const debouncedSearch = useDebouncedInput(searchValue, 350);
 
   useEffect(() => {
-    setSearch(debouncedSearch);
-  }, [debouncedSearch, setSearch]);
+    const normalized = debouncedSearch.trim();
+    const currentSearch = query.search ?? "";
+
+    if (normalized === currentSearch) {
+      return;
+    }
+
+    setSearch(normalized.length > 0 ? normalized : undefined);
+  }, [debouncedSearch, query.search, setSearch]);
 
   useEffect(() => {
     setSearchValue(query.search ?? "");
@@ -49,7 +58,9 @@ export function DriversPage() {
     [query],
   );
 
-  const { data, isLoading, isFetching } = useDriversQuery(driversQuery);
+  const { data, isLoading, isFetching } = useDriversQuery(
+    driversQuery,
+  ) as UseQueryResult<DriversListResponse>;
   const { deleteDriver } = useDriverMutations();
 
   const drivers = data?.data ?? [];

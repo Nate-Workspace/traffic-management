@@ -3,23 +3,23 @@
 import { TableSortButton } from "./table-sort";
 import { cn } from "@/lib/cn";
 
-type SortHeaderProps = {
+type SortHeaderProps<TField extends string = string> = {
   label: string;
-  field: string;
+  field: TField;
   activeField?: string;
   sortOrder?: "asc" | "desc";
-  onChange: (field: string, order: "asc" | "desc") => void;
+  onChange: (field: TField, order: "asc" | "desc") => void;
   className?: string;
 };
 
-export function SortHeader({
+export function SortHeader<TField extends string = string>({
   label,
   field,
   activeField,
   sortOrder,
   onChange,
   className,
-}: SortHeaderProps) {
+}: SortHeaderProps<TField>) {
   const isActive = activeField === field;
   const direction = isActive ? sortOrder : "desc";
 
