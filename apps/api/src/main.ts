@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import { Logger, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { ConfigService } from "@nestjs/config";
 import { AppModule } from "./app.module";
-import { env } from "./config/env";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 import { ResponseTransformInterceptor } from "./common/interceptors/response-transform.interceptor";
@@ -13,10 +13,22 @@ async function bootstrap() {
   const logger = new Logger("Bootstrap");
   app.useLogger(logger);
   app.enableShutdownHooks();
-  app.setGlobalPrefix(env.API_PREFIX);
+  const configService = app.get(ConfigService);
+  const appConfig = configService.get<{
+    port: number;
+    prefix: string;
+    version: string;
+    corsOrigins: string[];
+  }>("app", { infer: true });
+
+  if (!appConfig) {
+    throw new Error("App configuration is missing");
+  }
+
+  app.setGlobalPrefix(appConfig.prefix);
   app.enableVersioning({
     type: VersioningType.URI,
-    defaultVersion: env.API_VERSION,
+    defaultVersion: appConfig.version,
   });
   app.useGlobalPipes(new ZodValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
@@ -25,12 +37,14 @@ async function bootstrap() {
     new ResponseTransformInterceptor(),
   );
   app.enableCors({
-    origin: env.CORS_ORIGINS,
+    origin: appConfig.corsOrigins,
     credentials: true,
   });
 
-  await app.listen(env.PORT);
-  logger.log(`API running on http://localhost:${env.PORT}/${env.API_PREFIX}/v${env.API_VERSION}`);
+  await app.listen(appConfig.port);
+  logger.log(
+    `API running on http://localhost:${appConfig.port}/${appConfig.prefix}/v${appConfig.version}`,
+  );
 }
 
 void bootstrap();

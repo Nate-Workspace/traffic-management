@@ -1,11 +1,11 @@
 import { registerAs } from "@nestjs/config";
-import { env } from "./env";
+import { getEnv } from "./env";
 
 export const appConfig = registerAs("app", () => ({
-  environment: env.NODE_ENV,
-  port: env.PORT,
-  prefix: env.API_PREFIX,
-  version: env.API_VERSION,
-  logLevel: env.LOG_LEVEL,
-  corsOrigins: env.CORS_ORIGINS,
+  environment: getEnv().NODE_ENV,
+  port: getEnv().PORT,
+  prefix: getEnv().API_PREFIX,
+  version: getEnv().API_VERSION,
+  logLevel: getEnv().LOG_LEVEL,
+  corsOrigins: getEnv().CORS_ORIGINS,
 }));

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
-import "@mantine/modals/styles.css";
 import "./globals.css";
 import { AppProviders } from "@/providers/app-providers";
 

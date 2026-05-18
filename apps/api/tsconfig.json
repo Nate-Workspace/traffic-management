@@ -2,7 +2,6 @@
   "extends": "../../packages/typescript-config/node.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
     "rootDir": "src",
     "outDir": "dist",
     "experimentalDecorators": true,

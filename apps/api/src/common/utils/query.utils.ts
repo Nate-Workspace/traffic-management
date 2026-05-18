@@ -54,6 +54,12 @@ export const buildSort = <T extends AnyColumn>(
   sortOrder: SortOrder,
   map: Record<string, T>,
 ) => {
-  const column = map[sortBy] ?? map[Object.keys(map)[0]];
+  const fallbackKey = Object.keys(map)[0];
+  const column = (sortBy in map ? map[sortBy] : undefined) ??
+    (fallbackKey ? map[fallbackKey] : undefined);
+
+  if (!column) {
+    throw new Error("Sort map is empty");
+  }
   return sortOrder === "asc" ? asc(column) : desc(column);
 };
