@@ -15,7 +15,9 @@ body {
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: radial-gradient(circle at top, #eef2ff 0%, transparent 45%),
+    radial-gradient(circle at 20% 20%, #f1f5f9 0%, transparent 40%),
+    var(--background);
   min-height: 100vh;
 }
 
