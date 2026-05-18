@@ -9,21 +9,25 @@ import {
 } from "../schema/violations.schema";
 
 export const violationSortFields = [
-  "createdAt",
+  "driverName",
   "violationAt",
-  "status",
+  "createdAt",
 ] as const;
 
 export const violationsQuerySchema = paginationSchema
   .merge(searchSchema)
   .merge(
     z.object({
-      sortBy: z.enum(violationSortFields).default("createdAt"),
+      sortBy: z.enum(violationSortFields).default("violationAt"),
       sortOrder: sortOrderSchema,
       status: z.enum(violationStatusValues).optional(),
       violationType: z.enum(violationTypeValues).optional(),
       plateNumber: z.string().trim().min(1).optional(),
       driverId: z.string().uuid().optional(),
+      violationAtFrom: z.coerce.date().optional(),
+      violationAtTo: z.coerce.date().optional(),
+      createdAtFrom: z.coerce.date().optional(),
+      createdAtTo: z.coerce.date().optional(),
     }),
   );
 

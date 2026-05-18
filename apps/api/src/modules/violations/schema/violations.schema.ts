@@ -43,5 +43,6 @@ export const violations = pgTable(
     statusIdx: index("violations_status_idx").on(table.status),
     typeIdx: index("violations_type_idx").on(table.violationType),
     violationAtIdx: index("violations_violation_at_idx").on(table.violationAt),
+    createdAtIdx: index("violations_created_at_idx").on(table.createdAt),
   }),
 );

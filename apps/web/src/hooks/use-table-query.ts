@@ -58,6 +58,15 @@ export const useTableQuery = (options: TableQueryOptions = {}) => {
     setQuery({ sortBy, sortOrder });
   const setFilter = (key: string, value?: string) =>
     setQuery({ [key]: value, page: 1 });
+  const setFilters = (filters: Record<string, string | undefined>) =>
+    setQuery({ ...filters, page: 1 });
+  const clearFilters = () => {
+    const filterReset = Object.fromEntries(
+      (options.filterKeys ?? []).map((key) => [key, undefined]),
+    );
+
+    setQuery({ ...filterReset, page: 1 });
+  };
   const reset = () => {
     const filterReset = Object.fromEntries(
       (options.filterKeys ?? []).map((key) => [key, undefined]),
@@ -80,6 +89,8 @@ export const useTableQuery = (options: TableQueryOptions = {}) => {
     setSearch,
     setSort,
     setFilter,
+    setFilters,
+    clearFilters,
     reset,
   };
 };
