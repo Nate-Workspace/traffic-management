@@ -7,6 +7,7 @@ import { DatabaseModule } from "./database/database.module";
 import { HealthModule } from "./modules/health/health.module";
 import { DriversModule } from "./modules/drivers/drivers.module";
 import { ViolationsModule } from "./modules/violations/violations.module";
+import { AnalyticsModule } from "./modules/analytics/analytics.module";
 import { requestIdMiddleware } from "./common/middleware/request-id.middleware";
 
 @Module({
@@ -22,6 +23,7 @@ import { requestIdMiddleware } from "./common/middleware/request-id.middleware";
     HealthModule,
     DriversModule,
     ViolationsModule,
+    AnalyticsModule,
   ],
 })
 export class AppModule implements NestModule {
