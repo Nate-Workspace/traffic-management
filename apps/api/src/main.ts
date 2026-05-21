@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { Logger, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import cookieParser from "cookie-parser";
 import { ConfigService } from "@nestjs/config";
 import { AppModule } from "./app.module";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
@@ -25,6 +26,7 @@ async function bootstrap() {
     throw new Error("App configuration is missing");
   }
 
+  app.use(cookieParser());
   app.setGlobalPrefix(appConfig.prefix);
   app.enableVersioning({
     type: VersioningType.URI,

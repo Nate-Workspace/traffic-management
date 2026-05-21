@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ProtectedRoute } from "@/features/auth/components/protected-route";
 import { DashboardLayout } from "@/layouts/dashboard/dashboard-layout";
 
 export default function DashboardGroupLayout({
@@ -6,5 +7,9 @@ export default function DashboardGroupLayout({
 }: {
   children: ReactNode;
 }) {
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+    <ProtectedRoute>
+      <DashboardLayout>{children}</DashboardLayout>
+    </ProtectedRoute>
+  );
 }

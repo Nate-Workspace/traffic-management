@@ -1,4 +1,8 @@
 export const queryKeys = {
+  auth: {
+    session: ["auth", "session"] as const,
+    me: ["auth", "me"] as const,
+  },
   drivers: {
     all: ["drivers"] as const,
     list: (query: Record<string, unknown>) => ["drivers", "list", query] as const,

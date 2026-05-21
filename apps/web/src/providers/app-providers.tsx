@@ -7,6 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { createQueryClient } from "@/providers/query-client";
+import { AuthProvider } from "@/providers/auth-provider";
 import { theme } from "@/config/theme";
 
 type AppProvidersProps = {
@@ -18,12 +19,14 @@ export function AppProviders({ children }: AppProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme} defaultColorScheme="light">
-        <ModalsProvider>
-          <Notifications position="top-right" />
-          {children}
-        </ModalsProvider>
-      </MantineProvider>
+      <AuthProvider>
+        <MantineProvider theme={theme} defaultColorScheme="light">
+          <ModalsProvider>
+            <Notifications position="top-right" />
+            {children}
+          </ModalsProvider>
+        </MantineProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

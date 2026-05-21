@@ -1,6 +1,7 @@
 "use client";
 
-import { ActionIcon, TextInput } from "@mantine/core";
+import { ActionIcon, Avatar, Menu, TextInput } from "@mantine/core";
+import { useAuth } from "@/providers/auth-provider";
 import { cn } from "@/lib/cn";
 
 type TopbarProps = {
@@ -9,6 +10,8 @@ type TopbarProps = {
 };
 
 export function Topbar({ onOpenSidebar, className }: TopbarProps) {
+  const { admin, logout } = useAuth();
+
   return (
     <header
       className={cn(
@@ -36,10 +39,30 @@ export function Topbar({ onOpenSidebar, className }: TopbarProps) {
 
       <div className="flex items-center gap-3">
         <div className="hidden text-right text-xs text-slate-500 sm:block">
-          <p className="font-semibold text-slate-700">Operations</p>
-          <p>Last sync 2m ago</p>
+          <p className="font-semibold text-slate-700">{admin?.fullName ?? "Admin"}</p>
+          <p>{admin?.email ?? "Administrator"}</p>
         </div>
-        <div className="h-9 w-9 rounded-full bg-slate-200" />
+        <Menu position="bottom-end" withinPortal>
+          <Menu.Target>
+            <button
+              type="button"
+              className="rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
+              aria-label="Account menu"
+            >
+              <Avatar radius="xl" color="blue" size="md">
+                {admin?.fullName?.charAt(0) ?? "A"}
+              </Avatar>
+            </button>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Label>Account</Menu.Label>
+            <Menu.Item disabled>{admin?.email}</Menu.Item>
+            <Menu.Divider />
+            <Menu.Item color="red" onClick={() => void logout()}>
+              Sign out
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </div>
     </header>
   );
