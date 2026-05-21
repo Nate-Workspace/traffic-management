@@ -1,7 +1,8 @@
 "use client";
 
-import { ActionIcon, Avatar, Menu, TextInput } from "@mantine/core";
+import { ActionIcon, Avatar, Menu, Text, UnstyledButton } from "@mantine/core";
 import { useAuth } from "@/providers/auth-provider";
+import { DashboardBreadcrumbs } from "./breadcrumbs";
 import { cn } from "@/lib/cn";
 
 type TopbarProps = {
@@ -15,7 +16,7 @@ export function Topbar({ onOpenSidebar, className }: TopbarProps) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 flex items-center gap-3 border-b border-zinc-200/80 bg-white/85 px-4 py-3 backdrop-blur-md sm:gap-4 sm:px-6",
+        "z-30 flex shrink-0 items-center gap-3 border-b border-zinc-200/80 bg-white/90 px-4 py-3 backdrop-blur-md sm:gap-4 sm:px-6",
         className,
       )}
     >
@@ -42,61 +43,63 @@ export function Topbar({ onOpenSidebar, className }: TopbarProps) {
       </ActionIcon>
 
       <div className="min-w-0 flex-1">
-        <TextInput
-          size="sm"
-          placeholder="Search drivers, plates, violations…"
-          radius="md"
-          classNames={{
-            input:
-              "border-zinc-200/80 bg-zinc-50/80 transition-colors duration-150 focus:bg-white",
-          }}
-          leftSection={
-            <span className="text-zinc-400" aria-hidden>
-              ⌕
-            </span>
-          }
-        />
+        <DashboardBreadcrumbs />
       </div>
 
-      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-        <div className="hidden text-right sm:block">
-          <p className="text-[13px] font-medium leading-tight text-zinc-800">
-            {admin?.fullName ?? "Admin"}
-          </p>
-          <p className="max-w-[180px] truncate text-[11px] text-zinc-500">
-            {admin?.email ?? "Administrator"}
-          </p>
-        </div>
-        <Menu position="bottom-end" withinPortal shadow="md" radius="md">
-          <Menu.Target>
-            <button
-              type="button"
-              className="rounded-full ring-2 ring-transparent transition-shadow duration-150 hover:ring-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
-              aria-label="Account menu"
-            >
-              <Avatar radius="xl" color="dark" size="sm" variant="filled">
-                {admin?.fullName?.charAt(0) ?? "A"}
-              </Avatar>
-            </button>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Label className="text-[11px] uppercase tracking-wider text-zinc-400">
-              Account
-            </Menu.Label>
-            <Menu.Item disabled className="text-zinc-600">
+      <Menu
+        position="bottom-end"
+        withinPortal
+        shadow="md"
+        radius="md"
+        width={260}
+        offset={8}
+      >
+        <Menu.Target>
+          <UnstyledButton
+            className="flex items-center gap-2.5 rounded-xl border border-transparent px-1.5 py-1 transition-all duration-150 hover:border-zinc-200/80 hover:bg-zinc-50"
+            aria-label="Account menu"
+          >
+            <Avatar radius="xl" color="dark" size="sm" variant="filled">
+              {admin?.fullName?.charAt(0) ?? "A"}
+            </Avatar>
+            <div className="hidden text-left sm:block">
+              <Text size="sm" fw={600} className="leading-tight text-zinc-900">
+                {admin?.fullName ?? "Admin"}
+              </Text>
+              <Text size="xs" c="dimmed" className="max-w-[160px] truncate">
+                {admin?.email ?? "Administrator"}
+              </Text>
+            </div>
+          </UnstyledButton>
+        </Menu.Target>
+
+        <Menu.Dropdown className="overflow-hidden p-1">
+          <div className="rounded-lg bg-zinc-50 px-3 py-2.5">
+            <Text size="xs" tt="uppercase" fw={600} className="tracking-wider text-zinc-400">
+              Signed in as
+            </Text>
+            <Text size="sm" fw={600} className="mt-1 text-zinc-900">
+              {admin?.fullName ?? "Administrator"}
+            </Text>
+            <Text size="xs" c="dimmed" className="mt-0.5 truncate">
               {admin?.email}
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item
-              color="red"
-              onClick={() => void logout()}
-              className="font-medium"
-            >
-              Sign out
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </div>
+            </Text>
+          </div>
+          <Menu.Divider my={6} />
+          <Menu.Item
+            color="red"
+            onClick={() => void logout()}
+            className="font-medium"
+            leftSection={
+              <span className="text-sm" aria-hidden>
+                ↪
+              </span>
+            }
+          >
+            Sign out
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
     </header>
   );
 }

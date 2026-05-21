@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@mantine/core": "^7.14.0",
+    "@mantine/dates": "^7.17.8",
     "@mantine/form": "^7.14.0",
     "@mantine/hooks": "^7.14.0",
     "@mantine/modals": "^7.14.0",
@@ -20,10 +21,11 @@
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.59.0",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.20",
     "next": "16.2.0",
-    "recharts": "^2.12.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "recharts": "^2.12.7",
     "tailwind-merge": "^2.5.5",
     "zod": "^3.23.8"
   },

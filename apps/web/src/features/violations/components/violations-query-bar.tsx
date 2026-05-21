@@ -1,6 +1,7 @@
 import { TableToolbar } from "@/components/tables/table-toolbar";
 import { TableSearch } from "@/components/tables/table-search";
-import { ActionIcon, Group, Select } from "@mantine/core";
+import { TableSortControls } from "@/components/tables/table-sort-controls";
+import { Group } from "@mantine/core";
 import type { ViolationSortField } from "../types/violation";
 
 type ViolationsQueryBarProps = {
@@ -11,6 +12,12 @@ type ViolationsQueryBarProps = {
   onSortChange: (field: ViolationSortField, order: "asc" | "desc") => void;
 };
 
+const sortOptions = [
+  { value: "violationAt" as const, label: "Violation time" },
+  { value: "createdAt" as const, label: "Created" },
+  { value: "driverName" as const, label: "Driver" },
+];
+
 export function ViolationsQueryBar({
   searchValue,
   onSearchChange,
@@ -18,8 +25,6 @@ export function ViolationsQueryBar({
   sortOrder,
   onSortChange,
 }: ViolationsQueryBarProps) {
-  const nextOrder = sortOrder === "asc" ? "desc" : "asc";
-
   return (
     <TableToolbar
       title="Violation monitoring"
@@ -32,30 +37,13 @@ export function ViolationsQueryBar({
         />
       }
       actions={
-        <Group gap="sm">
-          <Select
-            size="xs"
-            value={sortBy}
-            data={[
-              { value: "violationAt", label: "Violation time" },
-              { value: "createdAt", label: "Created" },
-              { value: "driverName", label: "Driver" },
-            ]}
-            onChange={(value) =>
-              onSortChange(
-                (value ?? "violationAt") as ViolationSortField,
-                sortOrder,
-              )
-            }
+        <Group gap="sm" wrap="wrap">
+          <TableSortControls
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            options={sortOptions}
+            onSortChange={onSortChange}
           />
-          <ActionIcon
-            variant="light"
-            color="gray"
-            onClick={() => onSortChange(sortBy as ViolationSortField, nextOrder)}
-            aria-label="Toggle sort order"
-          >
-            {sortOrder === "asc" ? "ASC" : "DESC"}
-          </ActionIcon>
         </Group>
       }
     />

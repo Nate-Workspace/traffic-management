@@ -1,5 +1,4 @@
 import { cn } from "@/lib/cn";
-import { surfaces } from "@/lib/ui/surfaces";
 
 type MetricCardProps = {
   label: string;
@@ -18,10 +17,15 @@ export function MetricCard({
 }: MetricCardProps) {
   if (isLoading) {
     return (
-      <div className={cn(surfaces.cardElevated, "p-4", className)}>
-        <div className="skeleton-shimmer h-3 w-20 rounded-full" />
-        <div className="skeleton-shimmer mt-3 h-8 w-16 rounded-lg" />
-        <div className="skeleton-shimmer mt-3 h-2.5 w-24 rounded-full" />
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm",
+          className,
+        )}
+      >
+        <div className="skeleton-shimmer h-3 w-24 rounded-full" />
+        <div className="skeleton-shimmer mt-4 h-9 w-20 rounded-lg" />
+        <div className="skeleton-shimmer mt-3 h-2.5 w-28 rounded-full" />
       </div>
     );
   }
@@ -29,19 +33,22 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        surfaces.cardElevated,
-        "group p-4 transition-colors duration-200 hover:border-zinc-300/80",
+        "group relative overflow-hidden rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:border-zinc-300/90 hover:shadow-md",
         className,
       )}
     >
-      <p className="text-[11px] font-medium uppercase tracking-wider text-zinc-400">
+      <div
+        className="absolute inset-y-0 left-0 w-1 bg-zinc-900/80 transition-opacity duration-200 group-hover:opacity-100"
+        aria-hidden
+      />
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-400">
         {label}
       </p>
-      <p className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 tabular-nums">
+      <p className="mt-3 text-[1.75rem] font-semibold leading-none tracking-tight text-zinc-900 tabular-nums">
         {value ?? "—"}
       </p>
       {helper ? (
-        <p className="mt-2 text-[12px] leading-relaxed text-zinc-500">{helper}</p>
+        <p className="mt-3 text-[12px] leading-relaxed text-zinc-500">{helper}</p>
       ) : null}
     </div>
   );

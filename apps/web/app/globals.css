@@ -56,11 +56,15 @@ a {
   }
 
   .page-title {
-    @apply text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl;
+    @apply text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl;
   }
 
   .page-description {
-    @apply text-sm leading-relaxed text-zinc-500;
+    @apply text-[13px] leading-relaxed text-zinc-500;
+  }
+
+  .section-title {
+    @apply text-[15px] font-semibold tracking-tight text-zinc-900;
   }
 
   .skeleton-shimmer {

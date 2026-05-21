@@ -15,18 +15,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <div className="min-h-screen bg-zinc-100/80">
-      <div className="flex min-h-screen">
-        <div className="hidden md:flex md:sticky md:top-0 md:h-screen md:shrink-0">
-          <Sidebar />
-        </div>
-        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
-          <Topbar onOpenSidebar={open} />
-          <main className="flex-1">
-            <ContentShell>{children}</ContentShell>
-          </main>
-        </div>
+    <div className="flex h-screen overflow-hidden bg-zinc-100/80">
+      <aside className="hidden h-screen w-[15.5rem] shrink-0 border-r border-zinc-200/80 md:block">
+        <Sidebar className="h-full" />
+      </aside>
+
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+        <Topbar onOpenSidebar={open} />
+        <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <ContentShell>{children}</ContentShell>
+        </main>
       </div>
+
       <MobileSidebar opened={opened} onClose={close} />
     </div>
   );

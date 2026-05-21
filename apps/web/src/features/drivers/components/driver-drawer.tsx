@@ -2,7 +2,7 @@
 
 import { Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { DriverForm } from "./driver-form";
 import { FormDrawer } from "@/components/forms/form-drawer";
 import { LoadingButton } from "@/components/feedback/loading-button";
@@ -22,6 +22,15 @@ const emptyValues: DriverFormValues = {
   driverLicenseNumber: "",
 };
 
+const toFormValues = (driver: Driver): DriverFormValues => ({
+  fullName: driver.fullName,
+  email: driver.email,
+  phoneNumber: driver.phoneNumber,
+  nationalId: driver.nationalId,
+  plateNumber: driver.plateNumber,
+  driverLicenseNumber: driver.driverLicenseNumber,
+});
+
 type DriverDrawerProps = {
   opened: boolean;
   mode: "create" | "edit";
@@ -33,30 +42,22 @@ export function DriverDrawer({ opened, mode, driver, onClose }: DriverDrawerProp
   const isEdit = mode === "edit";
   const { createDriver, updateDriver } = useDriverMutations();
 
-  const initialValues = useMemo(
-    () =>
-      driver
-        ? {
-            fullName: driver.fullName,
-            email: driver.email,
-            phoneNumber: driver.phoneNumber,
-            nationalId: driver.nationalId,
-            plateNumber: driver.plateNumber,
-            driverLicenseNumber: driver.driverLicenseNumber,
-          }
-        : emptyValues,
-    [driver],
-  );
-
   const form = useForm<DriverFormValues>({
-    initialValues,
+    initialValues: emptyValues,
     validate: zodResolver(driverFormSchema),
   });
 
   useEffect(() => {
-    form.setValues(initialValues);
-    form.resetDirty(initialValues);
-  }, [form, initialValues, opened]);
+    if (!opened) {
+      return;
+    }
+
+    const values = isEdit && driver ? toFormValues(driver) : emptyValues;
+    form.setValues(values);
+    form.resetDirty(values);
+    form.clearErrors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset only when drawer opens or target changes
+  }, [opened, driver?.id, mode]);
 
   const handleSubmit = async (values: DriverFormValues) => {
     const action = isEdit && driver

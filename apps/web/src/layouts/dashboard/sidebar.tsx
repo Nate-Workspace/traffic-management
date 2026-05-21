@@ -22,11 +22,11 @@ export function Sidebar({ className, onNavigate }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-full w-[15.5rem] shrink-0 flex-col border-r border-zinc-200/80 bg-white/90 px-3 py-5 backdrop-blur-sm",
+        "flex h-full w-full flex-col bg-white/95 px-3 py-5 backdrop-blur-sm",
         className,
       )}
     >
-      <div className="px-2">
+      <div className="shrink-0 px-2">
         <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-zinc-400">
           Traffic Ops
         </p>
@@ -35,8 +35,8 @@ export function Sidebar({ className, onNavigate }: SidebarProps) {
         </p>
       </div>
 
-      <nav className="mt-6 flex flex-1 flex-col gap-0.5 px-1">
-        <p className="mb-2 px-2 text-[11px] font-medium uppercase tracking-wider text-zinc-400">
+      <nav className="mt-6 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto px-1">
+        <p className="mb-2 shrink-0 px-2 text-[11px] font-medium uppercase tracking-wider text-zinc-400">
           Workspace
         </p>
         {primaryNav.map((item) => {
@@ -49,7 +49,7 @@ export function Sidebar({ className, onNavigate }: SidebarProps) {
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                "group flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-medium transition-all duration-150",
+                "group flex shrink-0 items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-medium transition-all duration-150",
                 isActive
                   ? "bg-zinc-900 text-white shadow-sm"
                   : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
@@ -72,7 +72,7 @@ export function Sidebar({ className, onNavigate }: SidebarProps) {
         })}
       </nav>
 
-      <div className="mx-1 rounded-lg border border-zinc-200/70 bg-zinc-50/90 px-3 py-2.5">
+      <div className="mx-1 mt-4 shrink-0 rounded-lg border border-zinc-200/70 bg-zinc-50/90 px-3 py-2.5">
         <p className="text-[11px] leading-relaxed text-zinc-500">
           Operational hub for drivers, violations, and analytics.
         </p>

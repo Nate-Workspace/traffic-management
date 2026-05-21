@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Group, Select, TextInput } from "@mantine/core";
+import { Button, Group, Select } from "@mantine/core";
+import { DateField } from "@/components/forms/date-field";
 import { FilterPanel } from "@/components/filters/filter-panel";
 import { violationStatusOptions } from "../constants";
 
@@ -32,46 +33,35 @@ export function ViolationsFilters({
           label="Status"
           placeholder="All statuses"
           size="sm"
+          comboboxProps={{ withinPortal: true }}
           data={violationStatusOptions}
           value={filters.status ?? null}
           onChange={(value) => onFilterChange("status", value || undefined)}
           clearable
         />
-        <TextInput
-          label="Violation date from"
-          type="date"
-          size="sm"
-          value={filters.violationAtFrom ?? ""}
-          onChange={(event) =>
-            onFilterChange("violationAtFrom", event.currentTarget.value || undefined)
-          }
+        <DateField
+          label="Violation from"
+          placeholder="Start date"
+          value={filters.violationAtFrom}
+          onChange={(value) => onFilterChange("violationAtFrom", value)}
         />
-        <TextInput
-          label="Violation date to"
-          type="date"
-          size="sm"
-          value={filters.violationAtTo ?? ""}
-          onChange={(event) =>
-            onFilterChange("violationAtTo", event.currentTarget.value || undefined)
-          }
+        <DateField
+          label="Violation to"
+          placeholder="End date"
+          value={filters.violationAtTo}
+          onChange={(value) => onFilterChange("violationAtTo", value)}
         />
-        <TextInput
+        <DateField
           label="Created from"
-          type="date"
-          size="sm"
-          value={filters.createdAtFrom ?? ""}
-          onChange={(event) =>
-            onFilterChange("createdAtFrom", event.currentTarget.value || undefined)
-          }
+          placeholder="Start date"
+          value={filters.createdAtFrom}
+          onChange={(value) => onFilterChange("createdAtFrom", value)}
         />
-        <TextInput
+        <DateField
           label="Created to"
-          type="date"
-          size="sm"
-          value={filters.createdAtTo ?? ""}
-          onChange={(event) =>
-            onFilterChange("createdAtTo", event.currentTarget.value || undefined)
-          }
+          placeholder="End date"
+          value={filters.createdAtTo}
+          onChange={(value) => onFilterChange("createdAtTo", value)}
         />
       </div>
     </FilterPanel>

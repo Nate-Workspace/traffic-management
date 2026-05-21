@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Group, TextInput } from "@mantine/core";
+import { SegmentedControl } from "@mantine/core";
+import { DateField } from "@/components/forms/date-field";
 
 type DateRangePickerProps = {
   startDate: string;
@@ -24,50 +25,47 @@ export function DateRangePicker({
   endDate,
   onRangeChange,
 }: DateRangePickerProps) {
-  const handleStartChange = (value: string) => {
-    const nextStart = value;
-    const nextEnd = endDate && value > endDate ? value : endDate;
+  const handleStartChange = (value: string | undefined) => {
+    const nextStart = value ?? "";
+    const nextEnd = endDate && nextStart > endDate ? nextStart : endDate;
     onRangeChange(nextStart, nextEnd);
   };
 
-  const handleEndChange = (value: string) => {
-    const nextEnd = value;
-    const nextStart = startDate && value < startDate ? value : startDate;
+  const handleEndChange = (value: string | undefined) => {
+    const nextEnd = value ?? "";
+    const nextStart = startDate && nextEnd < startDate ? nextEnd : startDate;
     onRangeChange(nextStart, nextEnd);
   };
 
   return (
-    <div className="flex flex-wrap items-end gap-3 rounded-xl border border-zinc-200/70 bg-white/80 px-3 py-3 shadow-sm">
-      <TextInput
+    <div className="flex flex-col gap-3 rounded-xl border border-zinc-200/70 bg-white px-3 py-3 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
+      <DateField
         label="Start date"
-        type="date"
-        size="sm"
+        placeholder="Pick start date"
         value={startDate}
-        onChange={(event) => handleStartChange(event.currentTarget.value)}
+        onChange={handleStartChange}
+        className="min-w-[160px] flex-1"
       />
-      <TextInput
+      <DateField
         label="End date"
-        type="date"
-        size="sm"
+        placeholder="Pick end date"
         value={endDate}
-        onChange={(event) => handleEndChange(event.currentTarget.value)}
+        onChange={handleEndChange}
+        className="min-w-[160px] flex-1"
       />
-      <Group gap="xs" className="pb-1">
-        {[7, 30, 90].map((days) => (
-          <Button
-            key={days}
-            size="xs"
-            variant="subtle"
-            color="gray"
-            onClick={() => {
-              const range = buildRange(days);
-              onRangeChange(range.startDate, range.endDate);
-            }}
-          >
-            Last {days}d
-          </Button>
-        ))}
-      </Group>
+      <SegmentedControl
+        size="xs"
+        className="sm:mb-1"
+        data={[
+          { label: "7d", value: "7" },
+          { label: "30d", value: "30" },
+          { label: "90d", value: "90" },
+        ]}
+        onChange={(value) => {
+          const range = buildRange(Number(value));
+          onRangeChange(range.startDate, range.endDate);
+        }}
+      />
     </div>
   );
 }

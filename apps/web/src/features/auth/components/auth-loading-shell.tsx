@@ -9,9 +9,9 @@ type AuthLoadingShellProps = {
 export function AuthLoadingShell({ variant = "fullscreen" }: AuthLoadingShellProps) {
   if (variant === "dashboard") {
     return (
-      <div className="min-h-screen bg-zinc-100/80">
-        <div className="flex min-h-screen">
-          <div className="hidden w-[15.5rem] shrink-0 border-r border-zinc-200/80 bg-white/90 p-5 md:block">
+      <div className="h-screen overflow-hidden bg-zinc-100/80">
+        <div className="flex h-screen">
+          <div className="hidden h-screen w-[15.5rem] shrink-0 border-r border-zinc-200/80 bg-white/90 p-5 md:block">
             <Skeleton height={10} width="55%" radius="xl" />
             <Skeleton height={20} mt="md" width="70%" radius="md" />
             <Stack gap="sm" mt="xl">
@@ -20,11 +20,11 @@ export function AuthLoadingShell({ variant = "fullscreen" }: AuthLoadingShellPro
               ))}
             </Stack>
           </div>
-          <div className="flex min-h-screen flex-1 flex-col">
+          <div className="flex min-h-0 flex-1 flex-col">
             <div className="border-b border-zinc-200/80 bg-white/85 px-6 py-3.5 backdrop-blur-md">
               <Skeleton height={36} radius="md" />
             </div>
-            <main className="flex-1 p-6">
+            <main className="min-h-0 flex-1 overflow-y-auto p-6">
               <Stack gap="md">
                 <Skeleton height={28} width={220} radius="md" />
                 <Skeleton height={48} radius="lg" />

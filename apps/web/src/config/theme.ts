@@ -5,11 +5,13 @@ import {
   Menu,
   Modal,
   Pagination,
+  SegmentedControl,
   Select,
   TextInput,
   createTheme,
   rem,
 } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
 
 export const theme = createTheme({
   fontFamily: "var(--font-geist-sans)",
@@ -167,6 +169,25 @@ export const theme = createTheme({
       defaultProps: {
         size: "sm",
         radius: "md",
+      },
+    }),
+    SegmentedControl: SegmentedControl.extend({
+      defaultProps: {
+        radius: "md",
+        size: "xs",
+      },
+    }),
+    DateInput: DateInput.extend({
+      defaultProps: {
+        size: "sm",
+        radius: "md",
+      },
+      styles: {
+        label: {
+          fontWeight: 500,
+          marginBottom: rem(6),
+          fontSize: rem(13),
+        },
       },
     }),
   },

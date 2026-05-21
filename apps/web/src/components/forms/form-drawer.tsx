@@ -45,6 +45,7 @@ export function FormDrawer({
       title={title}
       position="right"
       size="lg"
+      keepMounted={false}
       styles={{
         body: {
           padding: 0,

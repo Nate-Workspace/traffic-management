@@ -36,21 +36,21 @@ export function ViolationDetailsPage() {
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-[15px] font-semibold tracking-tight text-zinc-900">
+        <h2 className="section-title">
           Violation evidence
         </h2>
         <ViolationEvidence violation={data.violation} driver={data.driver} />
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-[15px] font-semibold tracking-tight text-zinc-900">
+        <h2 className="section-title">
           Driver information
         </h2>
         <ViolationDriverInfo driver={data.driver} />
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-[15px] font-semibold tracking-tight text-zinc-900">
+        <h2 className="section-title">
           Related violations
         </h2>
         <RelatedViolations violations={data.relatedViolations} />
