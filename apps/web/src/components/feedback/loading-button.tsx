@@ -8,5 +8,14 @@ type LoadingButtonProps = ButtonProps & {
 };
 
 export function LoadingButton({ isLoading, ...props }: LoadingButtonProps) {
-  return <Button loading={isLoading} {...props} />;
+  return (
+    <Button
+      loading={isLoading}
+      {...props}
+      classNames={{
+        root: "font-medium transition-all duration-150",
+        ...props.classNames,
+      }}
+    />
+  );
 }

@@ -45,8 +45,16 @@ export function FormDrawer({
       title={title}
       position="right"
       size="lg"
+      styles={{
+        body: {
+          padding: 0,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100%",
+        },
+      }}
     >
-      {children}
+      <div className="flex min-h-full flex-1 flex-col">{children}</div>
     </Drawer>
   );
 }

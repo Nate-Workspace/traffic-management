@@ -20,7 +20,20 @@ export const useConfirm = () => {
           confirm: options.confirmLabel ?? "Confirm",
           cancel: options.cancelLabel ?? "Cancel",
         },
-        confirmProps: { color: options.confirmColor ?? "red" },
+        confirmProps: {
+          color: options.confirmColor ?? "red",
+          variant: "filled",
+          size: "sm",
+        },
+        cancelProps: {
+          variant: "default",
+          color: "gray",
+          size: "sm",
+        },
+        groupProps: {
+          gap: "sm",
+          mt: "lg",
+        },
         onConfirm: () => resolve(true),
         onCancel: () => resolve(false),
       });

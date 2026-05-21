@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { UseQueryResult } from "@tanstack/react-query";
-import { Text } from "@mantine/core";
 import { TablePagination } from "@/components/tables/table-pagination";
 import { TableEmptyState } from "@/components/tables/table-empty-state";
 import { TableSkeleton } from "@/components/tables/table-skeleton";
@@ -114,14 +113,12 @@ export function DriversPage() {
   const emptyState = query.search ? driversSearchEmptyState : driversEmptyState;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <Text size="xl" fw={600} c="dark">
-          Drivers
-        </Text>
-        <Text size="sm" c="dimmed">
+    <div className="space-y-5">
+      <div className="page-header">
+        <h1 className="page-title">Drivers</h1>
+        <p className="page-description">
           Manage driver profiles and keep records consistent.
-        </Text>
+        </p>
       </div>
 
       <DriversQueryBar
@@ -160,9 +157,7 @@ export function DriversPage() {
       ) : null}
 
       {isFetching && !isLoading ? (
-        <Text size="xs" c="dimmed">
-          Updating results...
-        </Text>
+        <p className="text-[12px] text-zinc-400">Updating results…</p>
       ) : null}
 
       {drawerMode ? (

@@ -37,7 +37,7 @@ export function DateRangePicker({
   };
 
   return (
-    <div className="flex flex-wrap items-end gap-3">
+    <div className="flex flex-wrap items-end gap-3 rounded-xl border border-zinc-200/70 bg-white/80 px-3 py-3 shadow-sm">
       <TextInput
         label="Start date"
         type="date"

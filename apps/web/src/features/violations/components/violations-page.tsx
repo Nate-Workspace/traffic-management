@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { UseQueryResult } from "@tanstack/react-query";
-import { Text } from "@mantine/core";
 import { TablePagination } from "@/components/tables/table-pagination";
 import { TableEmptyState } from "@/components/tables/table-empty-state";
 import { TableSkeleton } from "@/components/tables/table-skeleton";
@@ -82,14 +81,12 @@ export function ViolationsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <Text size="xl" fw={600} c="dark">
-          Violations
-        </Text>
-        <Text size="sm" c="dimmed">
+    <div className="space-y-5">
+      <div className="page-header">
+        <h1 className="page-title">Violations</h1>
+        <p className="page-description">
           Review evidence, monitor status, and track incident history.
-        </Text>
+        </p>
       </div>
 
       <ViolationsQueryBar
@@ -130,9 +127,7 @@ export function ViolationsPage() {
       ) : null}
 
       {isFetching && !isLoading ? (
-        <Text size="xs" c="dimmed">
-          Updating results...
-        </Text>
+        <p className="text-[12px] text-zinc-400">Updating results…</p>
       ) : null}
     </div>
   );

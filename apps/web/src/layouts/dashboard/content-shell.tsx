@@ -8,7 +8,12 @@ type ContentShellProps = {
 
 export function ContentShell({ children, className }: ContentShellProps) {
   return (
-    <div className={cn("mx-auto w-full max-w-6xl px-6 py-6", className)}>
+    <div
+      className={cn(
+        "mx-auto w-full max-w-[1400px] px-4 py-5 sm:px-6 sm:py-6 lg:px-8",
+        className,
+      )}
+    >
       {children}
     </div>
   );

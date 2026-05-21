@@ -13,12 +13,32 @@ export function TableSortButton({ active, direction, onToggle }: TableSortProps)
   return (
     <ActionIcon
       variant="subtle"
-      size="sm"
+      size="xs"
+      radius="md"
       onClick={onToggle}
       aria-label="Toggle sort"
-      className={cn(active ? "text-slate-900" : "text-slate-400")}
+      className={cn(
+        "transition-colors duration-150",
+        active ? "bg-zinc-200/80 text-zinc-900" : "text-zinc-400 hover:text-zinc-600",
+      )}
     >
-      {direction === "asc" ? "↑" : "↓"}
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+        className={cn(
+          "transition-transform duration-150",
+          direction === "asc" && "rotate-180",
+        )}
+      >
+        <path d="M12 5v14M6 11l6-6 6 6" />
+      </svg>
     </ActionIcon>
   );
 }

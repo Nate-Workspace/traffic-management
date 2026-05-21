@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { surfaces } from "@/lib/ui/surfaces";
 
 type FilterPanelProps = {
   title: string;
@@ -17,22 +18,21 @@ export function FilterPanel({
   className,
 }: FilterPanelProps) {
   return (
-    <div
-      className={cn(
-        "rounded-xl border border-slate-200 bg-white px-4 py-4",
-        className,
-      )}
-    >
+    <div className={cn(surfaces.card, "px-4 py-3.5", className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+          <h3 className="text-[14px] font-semibold tracking-tight text-zinc-900">
+            {title}
+          </h3>
           {description ? (
-            <p className="mt-1 text-xs text-slate-500">{description}</p>
+            <p className="mt-0.5 text-[12px] leading-relaxed text-zinc-500">
+              {description}
+            </p>
           ) : null}
         </div>
         {actions}
       </div>
-      <div className="mt-4">{children}</div>
+      <div className="mt-4 border-t border-zinc-100/90 pt-4">{children}</div>
     </div>
   );
 }

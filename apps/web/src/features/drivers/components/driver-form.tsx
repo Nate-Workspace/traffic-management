@@ -8,7 +8,7 @@ type DriverFormProps = {
 
 export function DriverForm({ form }: DriverFormProps) {
   return (
-    <Stack gap="sm">
+    <Stack gap="md">
       <TextInput
         label="Full name"
         placeholder="John Doe"

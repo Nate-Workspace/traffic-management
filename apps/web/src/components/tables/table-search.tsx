@@ -16,6 +16,15 @@ export function TableSearch({ value, onChange, placeholder }: TableSearchProps) 
       value={value ?? ""}
       placeholder={placeholder ?? "Search"}
       onChange={(event) => onChange(event.currentTarget.value)}
+      classNames={{
+        input:
+          "border-zinc-200/80 bg-white transition-colors duration-150 focus:border-zinc-300",
+      }}
+      leftSection={
+        <span className="text-zinc-400" aria-hidden>
+          ⌕
+        </span>
+      }
     />
   );
 }

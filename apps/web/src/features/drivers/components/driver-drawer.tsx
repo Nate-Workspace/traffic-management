@@ -88,17 +88,22 @@ export function DriverDrawer({ opened, mode, driver, onClose }: DriverDrawerProp
       isDirty={form.isDirty()}
       onClose={onClose}
     >
-      <form onSubmit={form.onSubmit(handleSubmit)} className="space-y-6">
-        <DriverForm form={form} />
-        <Group justify="flex-end">
-          <LoadingButton
-            type="submit"
-            size="sm"
-            isLoading={createDriver.isPending || updateDriver.isPending}
-          >
-            {isEdit ? "Save changes" : "Create driver"}
-          </LoadingButton>
-        </Group>
+      <form onSubmit={form.onSubmit(handleSubmit)} className="flex min-h-full flex-col">
+        <div className="flex-1 space-y-6 px-6 py-6">
+          <DriverForm form={form} />
+        </div>
+        <div className="sticky bottom-0 border-t border-zinc-200/80 bg-white/95 px-6 py-4 backdrop-blur-sm">
+          <Group justify="flex-end" gap="sm">
+            <LoadingButton
+              type="submit"
+              size="sm"
+              color="dark"
+              isLoading={createDriver.isPending || updateDriver.isPending}
+            >
+              {isEdit ? "Save changes" : "Create driver"}
+            </LoadingButton>
+          </Group>
+        </div>
       </form>
     </FormDrawer>
   );

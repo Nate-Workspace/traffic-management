@@ -9,11 +9,11 @@ type DetailItemProps = {
 
 export function DetailItem({ label, value, className }: DetailItemProps) {
   return (
-    <div className={cn("space-y-1", className)}>
-      <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <div className={cn("space-y-1.5", className)}>
+      <p className="text-[11px] font-medium uppercase tracking-wider text-zinc-400">
         {label}
       </p>
-      <div className="text-sm text-slate-900">{value}</div>
+      <div className="text-[13px] font-medium text-zinc-800">{value}</div>
     </div>
   );
 }

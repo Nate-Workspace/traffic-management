@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { useViolationQuery } from "../hooks/use-violation-query";
@@ -28,34 +27,32 @@ export function ViolationDetailsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <Text size="xl" fw={600} c="dark">
-          Violation details
-        </Text>
-        <Text size="sm" c="dimmed">
+    <div className="space-y-5">
+      <div className="page-header">
+        <h1 className="page-title">Violation details</h1>
+        <p className="page-description">
           Review evidence, driver context, and related incidents.
-        </Text>
+        </p>
       </div>
 
-      <section className="space-y-4">
-        <Text size="lg" fw={600} c="dark">
+      <section className="space-y-3">
+        <h2 className="text-[15px] font-semibold tracking-tight text-zinc-900">
           Violation evidence
-        </Text>
+        </h2>
         <ViolationEvidence violation={data.violation} driver={data.driver} />
       </section>
 
-      <section className="space-y-4">
-        <Text size="lg" fw={600} c="dark">
+      <section className="space-y-3">
+        <h2 className="text-[15px] font-semibold tracking-tight text-zinc-900">
           Driver information
-        </Text>
+        </h2>
         <ViolationDriverInfo driver={data.driver} />
       </section>
 
-      <section className="space-y-4">
-        <Text size="lg" fw={600} c="dark">
+      <section className="space-y-3">
+        <h2 className="text-[15px] font-semibold tracking-tight text-zinc-900">
           Related violations
-        </Text>
+        </h2>
         <RelatedViolations violations={data.relatedViolations} />
       </section>
     </div>

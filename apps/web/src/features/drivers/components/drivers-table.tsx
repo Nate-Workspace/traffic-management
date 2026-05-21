@@ -37,7 +37,9 @@ export function DriversTable({
           onChange={onSort}
         />
       ),
-      cell: (row) => row.fullName,
+      cell: (row) => (
+        <span className="font-medium text-zinc-900">{row.fullName}</span>
+      ),
     },
     { key: "email", header: "Email", cell: (row) => row.email },
     { key: "phoneNumber", header: "Phone number", cell: (row) => row.phoneNumber },

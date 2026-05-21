@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { surfaces } from "@/lib/ui/surfaces";
 
 export type DataTableColumn<T> = {
   key: string;
@@ -23,25 +24,37 @@ export function DataTable<T>({
   className,
 }: DataTableProps<T>) {
   return (
-    <div className={cn("overflow-hidden rounded-xl border border-slate-200", className)}>
-      <table className="w-full border-collapse text-sm">
-        <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-          <tr>
+    <div className={cn(surfaces.table, "overflow-x-auto", className)}>
+      <table className="w-full min-w-[640px] border-collapse text-[13px]">
+        <thead>
+          <tr className="border-b border-zinc-200/80 bg-zinc-50/90">
             {columns.map((column) => (
               <th
                 key={column.key}
-                className={cn("px-4 py-3 font-semibold", column.headerClassName)}
+                className={cn(
+                  "px-4 py-2.5 text-left text-[11px] font-medium tracking-wide text-zinc-500",
+                  column.headerClassName,
+                )}
               >
                 {column.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 bg-white">
+        <tbody className="divide-y divide-zinc-100/90 bg-white">
           {data.map((row, index) => (
-            <tr key={rowKey(row, index)} className="hover:bg-slate-50">
+            <tr
+              key={rowKey(row, index)}
+              className="transition-colors duration-100 hover:bg-zinc-50/80"
+            >
               {columns.map((column) => (
-                <td key={column.key} className={cn("px-4 py-3", column.className)}>
+                <td
+                  key={column.key}
+                  className={cn(
+                    "px-4 py-3 align-middle text-zinc-700",
+                    column.className,
+                  )}
+                >
                   {column.cell(row)}
                 </td>
               ))}

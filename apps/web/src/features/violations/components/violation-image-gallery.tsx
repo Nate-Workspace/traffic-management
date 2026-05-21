@@ -37,7 +37,7 @@ export function ViolationImageGallery({ imageUrls }: ViolationImageGalleryProps)
             onClick={() => setActiveIndex(index)}
             className={cn(
               "rounded-lg ring-offset-2 transition",
-              index === safeIndex ? "ring-2 ring-slate-900" : "ring-1 ring-slate-200",
+              index === safeIndex ? "ring-2 ring-zinc-900" : "ring-1 ring-zinc-200",
             )}
             aria-label={`View evidence image ${index + 1}`}
           >
@@ -60,10 +60,10 @@ function EvidenceImage({ src, alt }: EvidenceImageProps) {
 
   return (
     <AspectRatio ratio={16 / 9}>
-      <div className="relative h-full w-full overflow-hidden rounded-lg bg-slate-100">
+      <div className="relative h-full w-full overflow-hidden rounded-lg bg-zinc-100">
         {!loaded && !error ? <Skeleton className="absolute inset-0" /> : null}
         {error ? (
-          <div className="flex h-full w-full items-center justify-center text-sm text-slate-500">
+          <div className="flex h-full w-full items-center justify-center text-sm text-zinc-500">
             Image unavailable
           </div>
         ) : (
@@ -94,10 +94,10 @@ function EvidenceThumbnail({ src, alt }: EvidenceThumbnailProps) {
 
   return (
     <AspectRatio ratio={1}>
-      <div className="relative h-full w-full overflow-hidden rounded-lg bg-slate-100">
+      <div className="relative h-full w-full overflow-hidden rounded-lg bg-zinc-100">
         {!loaded && !error ? <Skeleton className="absolute inset-0" /> : null}
         {error ? (
-          <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">
+          <div className="flex h-full w-full items-center justify-center text-xs text-zinc-500">
             Unavailable
           </div>
         ) : (

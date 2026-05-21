@@ -50,7 +50,7 @@ export function DriversQueryBar({
             }
           />
           <ActionIcon
-            variant="light"
+            variant="subtle"
             color="gray"
             onClick={() =>
               onSortChange(
@@ -62,7 +62,7 @@ export function DriversQueryBar({
           >
             {sortOrder === "asc" ? "ASC" : "DESC"}
           </ActionIcon>
-          <Button size="sm" onClick={onCreate}>
+          <Button size="sm" color="dark" onClick={onCreate}>
             Create driver
           </Button>
         </Group>

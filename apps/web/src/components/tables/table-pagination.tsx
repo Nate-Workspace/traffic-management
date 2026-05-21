@@ -1,7 +1,8 @@
 "use client";
 
-import { Pagination, Select } from "@mantine/core";
+import { Pagination, Select, Text } from "@mantine/core";
 import { cn } from "@/lib/cn";
+import { surfaces } from "@/lib/ui/surfaces";
 
 type TablePaginationProps = {
   page: number;
@@ -27,25 +28,35 @@ export function TablePagination({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-4 py-3",
+        surfaces.card,
+        "flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between",
         className,
       )}
     >
-      <p className="text-sm text-slate-600">
-        Page {page} of {totalPages}
-      </p>
-      <div className="flex items-center gap-3">
-        <Select
-          size="xs"
-          value={String(limit)}
-          data={limitOptions}
-          onChange={(value) => onLimitChange(Number(value))}
-        />
+      <Text size="sm" c="dimmed" className="text-[13px] text-zinc-500">
+        Page <span className="font-medium text-zinc-700">{page}</span> of{" "}
+        <span className="font-medium text-zinc-700">{totalPages}</span>
+      </Text>
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2">
+          <Text size="xs" c="dimmed" className="text-zinc-500">
+            Rows
+          </Text>
+          <Select
+            size="xs"
+            value={String(limit)}
+            data={limitOptions}
+            onChange={(value) => onLimitChange(Number(value))}
+            classNames={{ input: "w-[72px]" }}
+          />
+        </div>
         <Pagination
           total={safeTotal}
           value={page}
           onChange={onPageChange}
           size="sm"
+          radius="md"
+          withEdges={false}
         />
       </div>
     </div>

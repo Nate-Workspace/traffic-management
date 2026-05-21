@@ -29,8 +29,8 @@ export function SortHeader<TField extends string = string>({
   };
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <span>{label}</span>
+    <div className={cn("inline-flex items-center gap-1.5", className)}>
+      <span className={cn(isActive && "text-zinc-800")}>{label}</span>
       <TableSortButton active={isActive} direction={direction} onToggle={handleToggle} />
     </div>
   );
