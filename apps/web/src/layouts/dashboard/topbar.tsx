@@ -38,6 +38,7 @@ export function Topbar({ onOpenSidebar, className }: TopbarProps) {
           strokeLinecap="round"
           aria-hidden
         >
+          <title>Open navigation</title>
           <path d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </ActionIcon>
@@ -46,14 +47,7 @@ export function Topbar({ onOpenSidebar, className }: TopbarProps) {
         <DashboardBreadcrumbs />
       </div>
 
-      <Menu
-        position="bottom-end"
-        withinPortal
-        shadow="md"
-        radius="md"
-        width={260}
-        offset={8}
-      >
+      <Menu position="bottom-end" withinPortal shadow="md" radius="md" width={260} offset={8}>
         <Menu.Target>
           <UnstyledButton
             className="flex items-center gap-2.5 rounded-xl border border-transparent px-1.5 py-1 transition-all duration-150 hover:border-zinc-200/80 hover:bg-zinc-50"
@@ -90,11 +84,11 @@ export function Topbar({ onOpenSidebar, className }: TopbarProps) {
             color="red"
             onClick={() => void logout()}
             className="font-medium"
-            leftSection={
-              <span className="text-sm" aria-hidden>
-                ↪
-              </span>
-            }
+            // leftSection={
+            //   <span className="text-sm" aria-hidden>
+            //     ↪
+            //   </span>
+            // }
           >
             Sign out
           </Menu.Item>

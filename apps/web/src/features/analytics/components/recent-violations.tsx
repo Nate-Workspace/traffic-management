@@ -7,6 +7,8 @@ import { getViolationTypeLabel } from "@/features/violations/constants";
 import { ViolationStatusBadge } from "@/features/violations/components/violation-status-badge";
 import { analyticsRecentEmptyState } from "../constants";
 import type { RecentViolation } from "../types/analytics";
+import { ViolationActions } from "@/features/violations/components/violation-actions";
+import { ViolationListItem } from "@/features/violations/types/violation";
 
 type RecentViolationsProps = {
   violations: RecentViolation[];
@@ -43,17 +45,7 @@ export function RecentViolations({ violations }: RecentViolationsProps) {
     {
       key: "actions",
       header: "Actions",
-      cell: (row) => (
-        <ActionIcon
-          component={Link}
-          href={`/violations/${row.id}`}
-          variant="subtle"
-          color="gray"
-          aria-label="View violation"
-        >
-          View
-        </ActionIcon>
-      ),
+      cell: (row) => <ViolationActions violation={row as ViolationListItem} />,
       className: "text-right",
       headerClassName: "text-right",
     },
