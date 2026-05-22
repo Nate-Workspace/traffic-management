@@ -1,5 +1,34 @@
 export type ViolationStatus = "PENDING" | "NOTIFIED" | "REVIEWED" | "DISMISSED";
 export type ViolationType = "RED_LIGHT";
+export type NotificationDeliveryStatus = "NOT_SENT" | "SENT" | "FAILED";
+
+export type NotificationLogSummary = {
+  id: string;
+  deliveryStatus: NotificationDeliveryStatus;
+  recipientEmail: string;
+  failureReason: string | null;
+  attemptCount: number;
+  sentAt: string | null;
+  createdAt: string;
+};
+
+export type NotificationDispatchResult = {
+  violationId: string;
+  deliveryStatus: NotificationDeliveryStatus;
+  workflowStatus: ViolationStatus;
+  recipientEmail: string | null;
+  failureReason: string | null;
+  sentAt: string | null;
+  notificationLogId: string;
+};
+
+export type WorkflowStatusUpdate = {
+  id: string;
+  status: ViolationStatus;
+  notificationStatus: NotificationDeliveryStatus;
+  lastNotifiedAt: string | null;
+  updatedAt: string;
+};
 
 export type ViolationDriverSummary = {
   id: string;
@@ -21,6 +50,7 @@ export type ViolationListItem = {
   id: string;
   violationType: ViolationType;
   status: ViolationStatus;
+  notificationStatus: NotificationDeliveryStatus;
   imageUrls: string[];
   violationAt: string;
   createdAt: string;
@@ -41,6 +71,8 @@ export type ViolationDetail = {
     id: string;
     violationType: ViolationType;
     status: ViolationStatus;
+    notificationStatus: NotificationDeliveryStatus;
+    lastNotifiedAt: string | null;
     imageUrls: string[];
     violationAt: string;
     createdAt: string;
@@ -48,7 +80,10 @@ export type ViolationDetail = {
   };
   driver: ViolationDriverDetail;
   relatedViolations: RelatedViolation[];
+  latestNotification: NotificationLogSummary | null;
 };
+
+export type ManualWorkflowStatus = "PENDING" | "REVIEWED" | "DISMISSED";
 
 export type ViolationSortField = "driverName" | "violationAt" | "createdAt";
 

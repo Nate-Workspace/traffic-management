@@ -39,4 +39,12 @@ export const envSchema = z.object({
   ADMIN_SEED_EMAIL: z.string().email().optional(),
   ADMIN_SEED_PASSWORD: z.string().min(8).optional(),
   ADMIN_SEED_FULL_NAME: z.string().min(2).optional(),
+  EMAIL_ENABLED: z.coerce.boolean().default(true),
+  SMTP_HOST: z.string().default("smtp.gmail.com"),
+  SMTP_PORT: z.coerce.number().int().positive().default(587),
+  SMTP_SECURE: z.coerce.boolean().default(false),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_FROM: z.string().email().default("noreply@traffic.local"),
+  SMTP_FROM_NAME: z.string().default("Traffic Violation Management"),
 });

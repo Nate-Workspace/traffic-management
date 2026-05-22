@@ -9,7 +9,7 @@ export type SortOrder = "asc" | "desc";
 
 export type TableQueryOptions = {
   defaultSortBy?: string;
-  filterKeys?: string[];
+  filterKeys?: readonly string[];
 };
 
 export type TableQueryState = {

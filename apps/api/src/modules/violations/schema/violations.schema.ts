@@ -12,6 +12,19 @@ export const violationStatusValues = [
 
 export const violationTypeValues = ["RED_LIGHT"] as const;
 
+export type ViolationType = (typeof violationTypeValues)[number];
+
+export const notificationDeliveryStatusValues = [
+  "NOT_SENT",
+  "SENT",
+  "FAILED",
+] as const;
+
+export const notificationDeliveryStatusEnum = pgEnum(
+  "notification_delivery_status",
+  notificationDeliveryStatusValues,
+);
+
 export const violationStatusEnum = pgEnum(
   "violation_status",
   violationStatusValues,
@@ -36,6 +49,10 @@ export const violations = pgTable(
       .default(sql`ARRAY[]::text[]`),
     violationAt: timestamp("violation_at", { withTimezone: true }).notNull(),
     status: violationStatusEnum("status").notNull().default("PENDING"),
+    notificationStatus: notificationDeliveryStatusEnum("notification_status")
+      .notNull()
+      .default("NOT_SENT"),
+    lastNotifiedAt: timestamp("last_notified_at", { withTimezone: true }),
     ...timestamps,
   },
   (table) => ({

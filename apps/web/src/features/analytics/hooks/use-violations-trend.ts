@@ -6,8 +6,8 @@ import type { AnalyticsRangeQuery, ViolationsTrendResponse } from "../types/anal
 export const useViolationsTrend = (
   query: AnalyticsRangeQuery,
 ): UseQueryResult<ViolationsTrendResponse> =>
-  useQuery({
+  useQuery<ViolationsTrendResponse>({
     queryKey: queryKeys.analytics.trend(query),
     queryFn: () => analyticsApi.violationsTrend(query),
-    keepPreviousData: true,
+    placeholderData: (previous) => previous,
   });

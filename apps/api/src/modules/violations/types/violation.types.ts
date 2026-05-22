@@ -1,11 +1,15 @@
 import type { violations } from "../schema/violations.schema";
 import type {
+  notificationDeliveryStatusValues,
   violationStatusValues,
   violationTypeValues,
 } from "../schema/violations.schema";
+import type { NotificationLogSummary } from "@modules/notifications/types/notification.types";
 
 export type ViolationStatus = (typeof violationStatusValues)[number];
 export type ViolationType = (typeof violationTypeValues)[number];
+export type NotificationDeliveryStatus =
+  (typeof notificationDeliveryStatusValues)[number];
 
 export type Violation = typeof violations.$inferSelect;
 export type NewViolation = typeof violations.$inferInsert;
@@ -30,6 +34,7 @@ export type ViolationListItem = {
   id: string;
   violationType: ViolationType;
   status: ViolationStatus;
+  notificationStatus: NotificationDeliveryStatus;
   imageUrls: string[];
   violationAt: Date;
   createdAt: Date;
@@ -50,6 +55,8 @@ export type ViolationDetail = {
     id: string;
     violationType: ViolationType;
     status: ViolationStatus;
+    notificationStatus: NotificationDeliveryStatus;
+    lastNotifiedAt: Date | null;
     imageUrls: string[];
     violationAt: Date;
     createdAt: Date;
@@ -57,6 +64,7 @@ export type ViolationDetail = {
   };
   driver: ViolationDriverDetail;
   relatedViolations: RelatedViolation[];
+  latestNotification: NotificationLogSummary | null;
 };
 
 export type AiViolationPayload = {
@@ -71,6 +79,10 @@ export type AiViolationResult =
       status: "created";
       violation: ViolationListItem;
       driver: ViolationDriverSummary;
+      notification: {
+        deliveryStatus: NotificationDeliveryStatus;
+        failureReason: string | null;
+      };
     }
   | {
       status: "driver_not_found";

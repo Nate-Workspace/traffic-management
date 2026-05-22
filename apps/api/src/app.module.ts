@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { appConfig } from "./config/app.config";
 import { authConfig } from "./config/auth.config";
+import { emailConfig } from "./config/email.config";
 import { databaseConfig } from "./config/database";
 import { validateEnv } from "./config/env";
 import { DatabaseModule } from "./database/database.module";
@@ -18,7 +19,7 @@ import { requestIdMiddleware } from "./common/middleware/request-id.middleware";
       isGlobal: true,
       cache: true,
       expandVariables: true,
-      load: [appConfig, authConfig, databaseConfig],
+      load: [appConfig, authConfig, emailConfig, databaseConfig],
       validate: validateEnv,
     }),
     DatabaseModule,

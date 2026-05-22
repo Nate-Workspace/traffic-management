@@ -6,8 +6,8 @@ import type { AnalyticsRangeQuery, AnalyticsSummary } from "../types/analytics";
 export const useAnalyticsSummary = (
   query: AnalyticsRangeQuery,
 ): UseQueryResult<AnalyticsSummary> =>
-  useQuery({
+  useQuery<AnalyticsSummary>({
     queryKey: queryKeys.analytics.summary(query),
     queryFn: () => analyticsApi.summary(query),
-    keepPreviousData: true,
+    placeholderData: (previous) => previous,
   });

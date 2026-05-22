@@ -7,6 +7,7 @@ import { RelatedViolations } from "./related-violations";
 import { ViolationDetailsSkeleton } from "./violation-details-skeleton";
 import { ViolationDriverInfo } from "./violation-driver-info";
 import { ViolationEvidence } from "./violation-evidence";
+import { ViolationOperationsPanel } from "./violation-operations-panel";
 
 export function ViolationDetailsPage() {
   const params = useParams();
@@ -35,10 +36,10 @@ export function ViolationDetailsPage() {
         </p>
       </div>
 
+      <ViolationOperationsPanel data={data} />
+
       <section className="space-y-3">
-        <h2 className="section-title">
-          Violation evidence
-        </h2>
+        <h2 className="section-title">Violation evidence</h2>
         <ViolationEvidence violation={data.violation} driver={data.driver} />
       </section>
 

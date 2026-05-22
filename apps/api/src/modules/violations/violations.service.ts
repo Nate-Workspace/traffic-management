@@ -1,6 +1,7 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { and, desc, eq, gte, lte, ne, sql } from "drizzle-orm";
 import { drivers } from "@modules/drivers/schema/drivers.schema";
+import { NotificationsService } from "@modules/notifications/notifications.service";
 import { violations } from "./schema/violations.schema";
 import { DRIZZLE_DB } from "@database/database.tokens";
 import type { Database } from "@database/database.types";
@@ -36,7 +37,10 @@ const toRangeEnd = (value: Date) => {
 
 @Injectable()
 export class ViolationsService {
-  constructor(@Inject(DRIZZLE_DB) private readonly db: Database) {}
+  constructor(
+    @Inject(DRIZZLE_DB) private readonly db: Database,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   private mapListItem(row: {
     id: string;
@@ -45,6 +49,7 @@ export class ViolationsService {
     plateNumber: string;
     violationType: ViolationListItem["violationType"];
     status: ViolationListItem["status"];
+    notificationStatus: ViolationListItem["notificationStatus"];
     imageUrls: string[];
     violationAt: Date;
     createdAt: Date;
@@ -54,6 +59,7 @@ export class ViolationsService {
       id: row.id,
       violationType: row.violationType,
       status: row.status,
+      notificationStatus: row.notificationStatus,
       imageUrls: row.imageUrls,
       violationAt: row.violationAt,
       createdAt: row.createdAt,
@@ -87,11 +93,18 @@ export class ViolationsService {
         violationType: payload.violationType,
         imageUrls: payload.imageUrls,
         violationAt: payload.violationAt,
-        status: payload.status,
+        status: payload.status ?? "PENDING",
+        notificationStatus: "NOT_SENT",
       })
       .returning();
 
-    return violation;
+    if (!violation) {
+      throw new Error("Failed to create violation");
+    }
+
+    await this.notificationsService.dispatchViolationNotice(violation.id);
+
+    return this.findDetails(violation.id);
   }
 
   async findAll(query: ViolationsQuery): Promise<PaginatedResult<ViolationListItem>> {
@@ -145,6 +158,7 @@ export class ViolationsService {
         plateNumber: drivers.plateNumber,
         violationType: violations.violationType,
         status: violations.status,
+        notificationStatus: violations.notificationStatus,
         imageUrls: violations.imageUrls,
         violationAt: violations.violationAt,
         createdAt: violations.createdAt,
@@ -177,6 +191,8 @@ export class ViolationsService {
         id: violations.id,
         violationType: violations.violationType,
         status: violations.status,
+        notificationStatus: violations.notificationStatus,
+        lastNotifiedAt: violations.lastNotifiedAt,
         imageUrls: violations.imageUrls,
         violationAt: violations.violationAt,
         createdAt: violations.createdAt,
@@ -227,11 +243,15 @@ export class ViolationsService {
       createdAt: row.createdAt,
     }));
 
+    const latestNotification = await this.notificationsService.getLatestLog(id);
+
     return {
       violation: {
         id: violation.id,
         violationType: violation.violationType,
         status: violation.status,
+        notificationStatus: violation.notificationStatus,
+        lastNotifiedAt: violation.lastNotifiedAt,
         imageUrls: violation.imageUrls,
         violationAt: violation.violationAt,
         createdAt: violation.createdAt,
@@ -247,6 +267,7 @@ export class ViolationsService {
         driverLicenseNumber: violation.driverLicense,
       },
       relatedViolations,
+      latestNotification,
     };
   }
 
@@ -276,11 +297,13 @@ export class ViolationsService {
         imageUrls: payload.imageUrls,
         violationAt: new Date(payload.timestamp),
         status: "PENDING",
+        notificationStatus: "NOT_SENT",
       })
       .returning({
         id: violations.id,
         violationType: violations.violationType,
         status: violations.status,
+        notificationStatus: violations.notificationStatus,
         imageUrls: violations.imageUrls,
         violationAt: violations.violationAt,
         createdAt: violations.createdAt,
@@ -291,18 +314,31 @@ export class ViolationsService {
       throw new Error("Failed to create violation");
     }
 
+    const notification = await this.notificationsService.dispatchViolationNotice(
+      violation.id,
+    );
+
+    const listItem = this.mapListItem({
+      id: violation.id,
+      driverId: driver.id,
+      driverName: driver.fullName,
+      plateNumber: driver.plateNumber,
+      violationType: violation.violationType,
+      status: notification.workflowStatus,
+      notificationStatus: notification.deliveryStatus,
+      imageUrls: violation.imageUrls,
+      violationAt: violation.violationAt,
+      createdAt: violation.createdAt,
+      updatedAt: violation.updatedAt,
+    });
+
     return {
       status: "created",
       driver,
-      violation: {
-        id: violation.id,
-        violationType: violation.violationType,
-        status: violation.status,
-        imageUrls: violation.imageUrls,
-        violationAt: violation.violationAt,
-        createdAt: violation.createdAt,
-        updatedAt: violation.updatedAt,
-        driver,
+      violation: listItem,
+      notification: {
+        deliveryStatus: notification.deliveryStatus,
+        failureReason: notification.failureReason,
       },
     };
   }

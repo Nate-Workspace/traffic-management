@@ -1,18 +1,16 @@
-import { Badge } from "@mantine/core";
-import { violationStatusColors } from "../constants";
+import { StatusBadge, type StatusBadgeTone } from "@/components/feedback/status-badge";
+import { violationStatusLabels, violationStatusTones } from "../constants";
 import type { ViolationStatus } from "../types/violation";
 
 type ViolationStatusBadgeProps = {
   status: ViolationStatus;
 };
 
-const formatStatus = (status: ViolationStatus) =>
-  `${status.slice(0, 1)}${status.slice(1).toLowerCase()}`;
-
 export function ViolationStatusBadge({ status }: ViolationStatusBadgeProps) {
   return (
-    <Badge color={violationStatusColors[status]} variant="light" size="sm">
-      {formatStatus(status)}
-    </Badge>
+    <StatusBadge
+      label={violationStatusLabels[status]}
+      tone={violationStatusTones[status] as StatusBadgeTone}
+    />
   );
 }

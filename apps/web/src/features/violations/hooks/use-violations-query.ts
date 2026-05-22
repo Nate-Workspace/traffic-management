@@ -6,8 +6,8 @@ import { queryKeys } from "@/services/api/query-keys";
 export const useViolationsQuery = (
   query: ViolationsQueryParams,
 ): UseQueryResult<ViolationsListResponse> =>
-  useQuery({
+  useQuery<ViolationsListResponse>({
     queryKey: queryKeys.violations.list(query),
     queryFn: () => violationsApi.list(query),
-    keepPreviousData: true,
+    placeholderData: (previous) => previous,
   });

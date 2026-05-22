@@ -1,4 +1,8 @@
-import type { ViolationStatus, ViolationType } from "./types/violation";
+import type {
+  NotificationDeliveryStatus,
+  ViolationStatus,
+  ViolationType,
+} from "./types/violation";
 
 export const violationFilterKeys = [
   "status",
@@ -35,6 +39,39 @@ export const violationStatusOptions: Array<{ value: ViolationStatus; label: stri
   { value: "DISMISSED", label: "Dismissed" },
 ];
 
+export const violationStatusLabels: Record<ViolationStatus, string> = {
+  PENDING: "Pending",
+  NOTIFIED: "Notified",
+  REVIEWED: "Reviewed",
+  DISMISSED: "Dismissed",
+};
+
+export const violationStatusTones: Record<
+  ViolationStatus,
+  "neutral" | "info" | "success" | "warning" | "danger"
+> = {
+  PENDING: "warning",
+  NOTIFIED: "info",
+  REVIEWED: "success",
+  DISMISSED: "neutral",
+};
+
+export const notificationStatusLabels: Record<NotificationDeliveryStatus, string> = {
+  NOT_SENT: "Not sent",
+  SENT: "Sent",
+  FAILED: "Failed",
+};
+
+export const notificationStatusTones: Record<
+  NotificationDeliveryStatus,
+  "neutral" | "info" | "success" | "warning" | "danger"
+> = {
+  NOT_SENT: "neutral",
+  SENT: "success",
+  FAILED: "danger",
+};
+
+/** @deprecated Use violationStatusTones — kept for any legacy imports */
 export const violationStatusColors: Record<ViolationStatus, string> = {
   PENDING: "yellow",
   NOTIFIED: "blue",

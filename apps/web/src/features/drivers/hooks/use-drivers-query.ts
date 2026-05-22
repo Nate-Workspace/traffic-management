@@ -9,5 +9,5 @@ export const useDriversQuery = (
   useQuery<DriversListResponse>({
     queryKey: queryKeys.drivers.list(query),
     queryFn: () => driversApi.list(query),
-    keepPreviousData: true,
+    placeholderData: (previous) => previous,
   });

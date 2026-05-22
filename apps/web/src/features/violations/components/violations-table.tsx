@@ -4,6 +4,7 @@ import { formatDateTime, formatDateTimeWithTime } from "@/lib/date";
 import { getViolationTypeLabel } from "../constants";
 import type { ViolationListItem, ViolationSortField } from "../types/violation";
 import { ViolationActions } from "./violation-actions";
+import { NotificationStatusBadge } from "./notification-status-badge";
 import { ViolationStatusBadge } from "./violation-status-badge";
 
 type ViolationsTableProps = {
@@ -36,8 +37,13 @@ export function ViolationsTable({ data, sortBy, sortOrder, onSort }: ViolationsT
     },
     {
       key: "status",
-      header: "Status",
+      header: "Workflow",
       cell: (row) => <ViolationStatusBadge status={row.status} />,
+    },
+    {
+      key: "notification",
+      header: "Notification",
+      cell: (row) => <NotificationStatusBadge status={row.notificationStatus} />,
     },
     {
       key: "violationAt",

@@ -9,8 +9,8 @@ import type {
 export const useRepeatedOffenders = (
   query: AnalyticsRangeQuery,
 ): UseQueryResult<RepeatedOffendersResponse> =>
-  useQuery({
+  useQuery<RepeatedOffendersResponse>({
     queryKey: queryKeys.analytics.repeatedOffenders(query),
     queryFn: () => analyticsApi.repeatedOffenders(query),
-    keepPreviousData: true,
+    placeholderData: (previous) => previous,
   });

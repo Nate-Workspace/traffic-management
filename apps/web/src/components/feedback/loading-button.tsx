@@ -1,10 +1,12 @@
 "use client";
 
+import type { MouseEventHandler } from "react";
 import { Button, type ButtonProps } from "@mantine/core";
 
 type LoadingButtonProps = ButtonProps & {
   isLoading?: boolean;
   type?: "button" | "submit" | "reset";
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export function LoadingButton({ isLoading, ...props }: LoadingButtonProps) {

@@ -24,7 +24,7 @@ export function ViolationImageGallery({ imageUrls }: ViolationImageGalleryProps)
   }
 
   const safeIndex = Math.min(activeIndex, imageUrls.length - 1);
-  const activeImage = imageUrls[safeIndex];
+  const activeImage = imageUrls[safeIndex]!;
 
   return (
     <div className="grid gap-4 lg:grid-cols-[2fr,1fr]">
