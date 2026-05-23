@@ -11,7 +11,7 @@ const seedAdmin = async () => {
 
   if (!env.ADMIN_SEED_EMAIL || !env.ADMIN_SEED_PASSWORD) {
     console.error(
-      "Set ADMIN_SEED_EMAIL and ADMIN_SEED_PASSWORD in your environment to seed an admin.",
+      "Set ADMIN_SEED_EMAIL and ADMIN_SEED_PASSWORD in your environment to seed an admin profile.",
     );
     process.exit(1);
   }
