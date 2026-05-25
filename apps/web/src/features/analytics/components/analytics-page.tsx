@@ -40,7 +40,7 @@ export function AnalyticsPage() {
         <div className="page-header">
           <h1 className="page-title">Analytics dashboard</h1>
           <p className="page-description">
-            Monitor system health, incident trends, and repeated offenders and more.
+            Monitor the system's health, incident trends, and repeated offenders and more.
           </p>
         </div>
         <DateRangePicker
