@@ -98,7 +98,7 @@ export function DriversPage() {
     try {
       await toastPromise(deleteDriver.mutateAsync(driver.id), {
         loading: { title: "Deleting driver", message: "Please wait" },
-        success: { title: "Driver deleted", message: "Driver removed" },
+        success: { title: "Driver deleted", message: "Driver removed successfully" },
         error: { title: "Delete failed", message: (error) => getApiErrorMessage(error) },
       });
     } finally {
