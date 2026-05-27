@@ -117,7 +117,7 @@ export function DriversPage() {
       <div className="page-header">
         <h1 className="page-title">Drivers</h1>
         <p className="page-description">
-          Manage driver profiles and keep records consistent.
+          Manage driver profiles and keep records synchronized.
         </p>
       </div>
 
