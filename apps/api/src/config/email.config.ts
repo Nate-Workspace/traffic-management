@@ -13,5 +13,7 @@ export const emailConfig = registerAs("email", () => {
     fromAddress: env.SMTP_FROM,
     fromName: env.SMTP_FROM_NAME,
     enabled: env.EMAIL_ENABLED,
+    mode: env.SMTP_MODE,
+    nodeEnv: env.NODE_ENV,
   };
 });

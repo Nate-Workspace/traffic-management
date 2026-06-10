@@ -28,6 +28,11 @@ export class DriversController {
     return this.driversService.findAll(query);
   }
 
+  @Get(":id/stats")
+  getStats(@Param() params: IdParamDto) {
+    return this.driversService.getStats(params.id);
+  }
+
   @Get(":id")
   findOne(@Param() params: IdParamDto) {
     return this.driversService.findOne(params.id);

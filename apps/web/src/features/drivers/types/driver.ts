@@ -17,3 +17,10 @@ export type DriversQueryParams = {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 };
+
+export type DriverStats = {
+  totalViolations: number;
+  pendingViolations: number;
+  reviewedViolations: number;
+  lastViolationAt: string | null;
+};

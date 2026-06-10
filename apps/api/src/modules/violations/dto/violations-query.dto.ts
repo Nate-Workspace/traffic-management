@@ -4,6 +4,7 @@ import { paginationSchema } from "@common/dto/pagination.dto";
 import { searchSchema } from "@common/dto/search.dto";
 import { sortOrderSchema } from "@common/dto/sort.dto";
 import {
+  notificationDeliveryStatusValues,
   violationStatusValues,
   violationTypeValues,
 } from "../schema/violations.schema";
@@ -21,6 +22,7 @@ export const violationsQuerySchema = paginationSchema
       sortBy: z.enum(violationSortFields).default("violationAt"),
       sortOrder: sortOrderSchema,
       status: z.enum(violationStatusValues).optional(),
+      notificationStatus: z.enum(notificationDeliveryStatusValues).optional(),
       violationType: z.enum(violationTypeValues).optional(),
       plateNumber: z.string().trim().min(1).optional(),
       driverId: z.string().uuid().optional(),

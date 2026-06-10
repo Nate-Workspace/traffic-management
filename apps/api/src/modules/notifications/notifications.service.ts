@@ -1,4 +1,5 @@
 import {
+  BadGatewayException,
   BadRequestException,
   Inject,
   Injectable,
@@ -89,7 +90,18 @@ export class NotificationsService {
   async resendViolationNotice(
     violationId: string,
   ): Promise<NotificationDispatchResult> {
-    return this.dispatchViolationNotice(violationId, { manual: true });
+    const result = await this.dispatchViolationNotice(violationId, {
+      manual: true,
+    });
+
+    if (result.deliveryStatus !== "SENT") {
+      throw new BadGatewayException({
+        code: "notification_delivery_failed",
+        message: result.failureReason ?? "Failed to send notification email",
+      });
+    }
+
+    return result;
   }
 
   async getLatestLog(violationId: string): Promise<NotificationLogSummary | null> {

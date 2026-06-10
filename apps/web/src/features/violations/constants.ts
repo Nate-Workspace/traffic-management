@@ -32,6 +32,15 @@ export const violationsRelatedEmptyState = {
   description: "This driver has no other recent violations.",
 };
 
+export const notificationStatusOptions: Array<{
+  value: NotificationDeliveryStatus;
+  label: string;
+}> = [
+  { value: "NOT_SENT", label: "Not sent" },
+  { value: "SENT", label: "Sent" },
+  { value: "FAILED", label: "Failed" },
+];
+
 export const violationStatusOptions: Array<{ value: ViolationStatus; label: string }> = [
   { value: "PENDING", label: "Pending" },
   { value: "NOTIFIED", label: "Notified" },

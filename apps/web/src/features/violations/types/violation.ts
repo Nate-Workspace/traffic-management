@@ -94,9 +94,12 @@ export type ViolationsQueryParams = {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   status?: ViolationStatus;
+  notificationStatus?: NotificationDeliveryStatus;
   violationAtFrom?: string;
   violationAtTo?: string;
   createdAtFrom?: string;
   createdAtTo?: string;
   driverId?: string;
 };
+
+export type DriverViolationSortField = "violationAt" | "createdAt";

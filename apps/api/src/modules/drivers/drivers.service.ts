@@ -1,6 +1,8 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { eq, sql } from "drizzle-orm";
+import { violations } from "@modules/violations/schema/violations.schema";
 import { drivers } from "./schema/drivers.schema";
+import type { DriverStats } from "./types/driver.types";
 import { DRIZZLE_DB } from "@database/database.tokens";
 import type { Database } from "@database/database.types";
 import type { CreateDriverInput } from "./dto/create-driver.dto";
@@ -70,6 +72,32 @@ export class DriversService {
   }
 
   async findOne(id: string) {
+    const driver = await this.getDriverOrThrow(id);
+    return driver;
+  }
+
+  async getStats(id: string): Promise<DriverStats> {
+    await this.getDriverOrThrow(id);
+
+    const [aggregates] = await this.db
+      .select({
+        totalViolations: sql<number>`count(*)::int`,
+        pendingViolations: sql<number>`count(*) filter (where ${violations.status} = 'PENDING')::int`,
+        reviewedViolations: sql<number>`count(*) filter (where ${violations.status} = 'REVIEWED')::int`,
+        lastViolationAt: sql<Date | null>`max(${violations.violationAt})`,
+      })
+      .from(violations)
+      .where(eq(violations.driverId, id));
+
+    return {
+      totalViolations: aggregates?.totalViolations ?? 0,
+      pendingViolations: aggregates?.pendingViolations ?? 0,
+      reviewedViolations: aggregates?.reviewedViolations ?? 0,
+      lastViolationAt: aggregates?.lastViolationAt?.toISOString() ?? null,
+    };
+  }
+
+  private async getDriverOrThrow(id: string) {
     const [driver] = await this.db
       .select()
       .from(drivers)

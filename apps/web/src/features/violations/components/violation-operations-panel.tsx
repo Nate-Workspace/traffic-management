@@ -33,20 +33,28 @@ export function ViolationOperationsPanel({ data }: ViolationOperationsPanelProps
     violation.notificationStatus === "NOT_SENT";
 
   const handleResend = async () => {
-    await toastPromise(resendNotification.mutateAsync(), {
-      loading: {
-        title: "Sending notification",
-        message: `Delivering notice to ${driver.email}`,
+    await toastPromise(
+      resendNotification.mutateAsync().then((result) => {
+        if (result.deliveryStatus !== "SENT") {
+          throw new Error(result.failureReason ?? "Unable to send email");
+        }
+        return result;
+      }),
+      {
+        loading: {
+          title: "Sending notification",
+          message: `Delivering notice to ${driver.email}`,
+        },
+        success: {
+          title: "Notification sent",
+          message: "The driver has been notified by email",
+        },
+        error: {
+          title: "Notification failed",
+          message: (error) => getApiErrorMessage(error, "Unable to send email"),
+        },
       },
-      success: {
-        title: "Notification sent",
-        message: "The driver has been notified by email",
-      },
-      error: {
-        title: "Notification failed",
-        message: (error) => getApiErrorMessage(error, "Unable to send email"),
-      },
-    });
+    );
   };
 
   const handleWorkflowChange = async (value: string | null) => {

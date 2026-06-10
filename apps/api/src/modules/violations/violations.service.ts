@@ -115,6 +115,7 @@ export class ViolationsService {
       sortOrder,
       search,
       status,
+      notificationStatus,
       violationType,
       plateNumber,
       driverId,
@@ -129,6 +130,9 @@ export class ViolationsService {
     const filters = combineFilters([
       buildSearchCondition(search, [drivers.fullName, drivers.plateNumber]),
       status ? eq(violations.status, status) : undefined,
+      notificationStatus
+        ? eq(violations.notificationStatus, notificationStatus)
+        : undefined,
       violationType ? eq(violations.violationType, violationType) : undefined,
       driverId ? eq(violations.driverId, driverId) : undefined,
       plateNumber ? eq(drivers.plateNumber, plateNumber) : undefined,

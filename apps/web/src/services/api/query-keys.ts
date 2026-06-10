@@ -7,6 +7,7 @@ export const queryKeys = {
     all: ["drivers"] as const,
     list: (query: Record<string, unknown>) => ["drivers", "list", query] as const,
     detail: (id: string) => ["drivers", "detail", id] as const,
+    stats: (id: string) => ["drivers", "stats", id] as const,
   },
   violations: {
     all: ["violations"] as const,

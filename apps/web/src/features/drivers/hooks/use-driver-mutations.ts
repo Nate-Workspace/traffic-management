@@ -15,8 +15,15 @@ export const useDriverMutations = () => {
   const updateDriver = useMutation({
     mutationFn: (payload: { id: string; values: Partial<DriverFormValues> }) =>
       driversApi.update(payload.id, payload.values),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: queryKeys.drivers.all }),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.drivers.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.drivers.detail(variables.id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.drivers.stats(variables.id),
+      });
+    },
   });
 
   const deleteDriver = useMutation({
