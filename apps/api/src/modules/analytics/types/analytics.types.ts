@@ -19,13 +19,16 @@ export type RecentViolation = {
   id: string;
   violationType: ViolationType;
   status: ViolationStatus;
+  plateNumber: string;
   violationAt: Date;
   createdAt: Date;
-  driver: {
-    id: string;
-    fullName: string;
-    plateNumber: string;
-  };
+  driver:
+    | {
+        id: string;
+        fullName: string;
+        plateNumber: string;
+      }
+    | null;
 };
 
 export type RecentViolationsResponse = AnalyticsStatic & {

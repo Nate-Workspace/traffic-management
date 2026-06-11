@@ -15,6 +15,15 @@ type ViolationsTableProps = {
 };
 
 export function ViolationsTable({ data, sortBy, sortOrder, onSort }: ViolationsTableProps) {
+  const formatUnknown = (value: string | null | undefined) => {
+    const trimmed = value?.trim();
+    if (!trimmed || trimmed.toLowerCase() === "unknown") {
+      return "Unknown";
+    }
+
+    return trimmed;
+  };
+
   const columns: Array<DataTableColumn<ViolationListItem>> = [
     {
       key: "driver",
@@ -27,9 +36,9 @@ export function ViolationsTable({ data, sortBy, sortOrder, onSort }: ViolationsT
           onChange={onSort}
         />
       ),
-      cell: (row) => row.driver.fullName,
+      cell: (row) => row.driver?.fullName ?? "Unknown Driver",
     },
-    { key: "plate", header: "Plate number", cell: (row) => row.driver.plateNumber },
+    { key: "plate", header: "Plate number", cell: (row) => formatUnknown(row.plateNumber) },
     {
       key: "type",
       header: "Violation type",

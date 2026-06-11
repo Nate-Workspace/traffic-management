@@ -24,9 +24,18 @@ export function RecentViolations({ violations }: RecentViolationsProps) {
     );
   }
 
+  const formatUnknown = (value: string | null | undefined) => {
+    const trimmed = value?.trim();
+    if (!trimmed || trimmed.toLowerCase() === "unknown") {
+      return "Unknown";
+    }
+
+    return trimmed;
+  };
+
   const columns: Array<DataTableColumn<RecentViolation>> = [
-    { key: "driver", header: "Driver", cell: (row) => row.driver.fullName },
-    { key: "plate", header: "Plate", cell: (row) => row.driver.plateNumber },
+    { key: "driver", header: "Driver", cell: (row) => row.driver?.fullName ?? "Unknown Driver" },
+    { key: "plate", header: "Plate", cell: (row) => formatUnknown(row.plateNumber) },
     {
       key: "type",
       header: "Type",

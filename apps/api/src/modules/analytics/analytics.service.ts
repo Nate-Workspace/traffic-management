@@ -159,14 +159,15 @@ export class AnalyticsService {
         id: violations.id,
         violationType: violations.violationType,
         status: violations.status,
+        plateNumber: violations.plateNumber,
         violationAt: violations.violationAt,
         createdAt: violations.createdAt,
         driverId: drivers.id,
         driverName: drivers.fullName,
-        plateNumber: drivers.plateNumber,
+        driverPlateNumber: drivers.plateNumber,
       })
       .from(violations)
-      .innerJoin(drivers, eq(violations.driverId, drivers.id))
+      .leftJoin(drivers, eq(violations.driverId, drivers.id))
       .orderBy(desc(violations.violationAt))
       .limit(limit);
 
@@ -179,11 +180,15 @@ export class AnalyticsService {
         status: row.status,
         violationAt: row.violationAt,
         createdAt: row.createdAt,
-        driver: {
-          id: row.driverId,
-          fullName: row.driverName,
-          plateNumber: row.plateNumber,
-        },
+        plateNumber: row.plateNumber,
+        driver:
+          row.driverId && row.driverName
+            ? {
+                id: row.driverId,
+                fullName: row.driverName,
+                plateNumber: row.driverPlateNumber ?? row.plateNumber,
+              }
+            : null,
       })),
     };
   }
@@ -233,7 +238,7 @@ export class AnalyticsService {
         count: sql<number>`count(*)`,
       })
       .from(violations)
-      .where(rangeCondition)
+      .where(and(rangeCondition, sql`${violations.driverId} is not null`))
       .groupBy(violations.driverId)
       .having(sql`count(*) > 1`)
       .as("offenders");

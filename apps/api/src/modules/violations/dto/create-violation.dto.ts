@@ -6,7 +6,7 @@ import {
 } from "../schema/violations.schema";
 
 export const createViolationSchema = z.object({
-  driverId: z.string().uuid(),
+  plateNumber: z.string().transform((value) => value.trim()),
   violationType: z.enum(violationTypeValues),
   imageUrls: z.array(z.string().url()).default([]),
   violationAt: z.coerce.date(),

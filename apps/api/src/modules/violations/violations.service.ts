@@ -42,10 +42,34 @@ export class ViolationsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
+  private normalizePlateNumber(plateNumber: string) {
+    return plateNumber.trim();
+  }
+
+  private async findDriverByPlateNumber(plateNumber: string) {
+    const normalizedPlateNumber = this.normalizePlateNumber(plateNumber);
+
+    if (!normalizedPlateNumber || normalizedPlateNumber.toLowerCase() === "unknown") {
+      return null;
+    }
+
+    const [driver] = await this.db
+      .select({
+        id: drivers.id,
+        fullName: drivers.fullName,
+        plateNumber: drivers.plateNumber,
+      })
+      .from(drivers)
+      .where(sql`lower(trim(${drivers.plateNumber})) = ${normalizedPlateNumber.toLowerCase()}`)
+      .limit(1);
+
+    return driver ?? null;
+  }
+
   private mapListItem(row: {
     id: string;
-    driverId: string;
-    driverName: string;
+    driverId: string | null;
+    driverName: string | null;
     plateNumber: string;
     violationType: ViolationListItem["violationType"];
     status: ViolationListItem["status"];
@@ -61,35 +85,30 @@ export class ViolationsService {
       status: row.status,
       notificationStatus: row.notificationStatus,
       imageUrls: row.imageUrls,
+      plateNumber: row.plateNumber,
       violationAt: row.violationAt,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
-      driver: {
-        id: row.driverId,
-        fullName: row.driverName,
-        plateNumber: row.plateNumber,
-      },
+      driver:
+        row.driverId && row.driverName
+          ? {
+              id: row.driverId,
+              fullName: row.driverName,
+              plateNumber: row.plateNumber,
+            }
+          : null,
     };
   }
 
   async create(payload: CreateViolationInput) {
-    const [driver] = await this.db
-      .select({ id: drivers.id })
-      .from(drivers)
-      .where(eq(drivers.id, payload.driverId))
-      .limit(1);
-
-    if (!driver) {
-      throw new NotFoundException({
-        code: "driver_not_found",
-        message: "Driver not found",
-      });
-    }
+    const plateNumber = this.normalizePlateNumber(payload.plateNumber);
+    const driver = await this.findDriverByPlateNumber(plateNumber);
 
     const [violation] = await this.db
       .insert(violations)
       .values({
-        driverId: payload.driverId,
+        driverId: driver?.id ?? null,
+        plateNumber,
         violationType: payload.violationType,
         imageUrls: payload.imageUrls,
         violationAt: payload.violationAt,
@@ -102,7 +121,9 @@ export class ViolationsService {
       throw new Error("Failed to create violation");
     }
 
-    await this.notificationsService.dispatchViolationNotice(violation.id);
+    if (driver) {
+      await this.notificationsService.dispatchViolationNotice(violation.id);
+    }
 
     return this.findDetails(violation.id);
   }
@@ -128,14 +149,16 @@ export class ViolationsService {
     const { offset } = getPagination({ page, limit });
 
     const filters = combineFilters([
-      buildSearchCondition(search, [drivers.fullName, drivers.plateNumber]),
+      buildSearchCondition(search, [drivers.fullName, violations.plateNumber]),
       status ? eq(violations.status, status) : undefined,
       notificationStatus
         ? eq(violations.notificationStatus, notificationStatus)
         : undefined,
       violationType ? eq(violations.violationType, violationType) : undefined,
       driverId ? eq(violations.driverId, driverId) : undefined,
-      plateNumber ? eq(drivers.plateNumber, plateNumber) : undefined,
+      plateNumber
+        ? sql`lower(trim(${violations.plateNumber})) = ${plateNumber.trim().toLowerCase()}`
+        : undefined,
       violationAtFrom
         ? gte(violations.violationAt, toRangeStart(violationAtFrom))
         : undefined,
@@ -159,7 +182,7 @@ export class ViolationsService {
         id: violations.id,
         driverId: violations.driverId,
         driverName: drivers.fullName,
-        plateNumber: drivers.plateNumber,
+        plateNumber: violations.plateNumber,
         violationType: violations.violationType,
         status: violations.status,
         notificationStatus: violations.notificationStatus,
@@ -169,7 +192,7 @@ export class ViolationsService {
         updatedAt: violations.updatedAt,
       })
       .from(violations)
-      .innerJoin(drivers, eq(violations.driverId, drivers.id))
+      .leftJoin(drivers, eq(violations.driverId, drivers.id))
       .where(filters)
       .orderBy(orderBy)
       .limit(limit)
@@ -178,7 +201,7 @@ export class ViolationsService {
     const countResult = await this.db
       .select({ count: sql<number>`count(*)` })
       .from(violations)
-      .innerJoin(drivers, eq(violations.driverId, drivers.id))
+      .leftJoin(drivers, eq(violations.driverId, drivers.id))
       .where(filters);
 
     const total = Number(countResult[0]?.count ?? 0);
@@ -198,6 +221,7 @@ export class ViolationsService {
         notificationStatus: violations.notificationStatus,
         lastNotifiedAt: violations.lastNotifiedAt,
         imageUrls: violations.imageUrls,
+        plateNumber: violations.plateNumber,
         violationAt: violations.violationAt,
         createdAt: violations.createdAt,
         updatedAt: violations.updatedAt,
@@ -210,7 +234,7 @@ export class ViolationsService {
         driverLicense: drivers.driverLicenseNumber,
       })
       .from(violations)
-      .innerJoin(drivers, eq(violations.driverId, drivers.id))
+      .leftJoin(drivers, eq(violations.driverId, drivers.id))
       .where(eq(violations.id, id))
       .limit(1);
 
@@ -221,23 +245,25 @@ export class ViolationsService {
       });
     }
 
-    const relatedRows = await this.db
-      .select({
-        id: violations.id,
-        violationType: violations.violationType,
-        status: violations.status,
-        violationAt: violations.violationAt,
-        createdAt: violations.createdAt,
-      })
-      .from(violations)
-      .where(
-        and(
-          eq(violations.driverId, violation.driverId),
-          ne(violations.id, violation.id),
-        ),
-      )
-      .orderBy(desc(violations.violationAt))
-      .limit(5);
+    const relatedRows = violation.driverId
+      ? await this.db
+          .select({
+            id: violations.id,
+            violationType: violations.violationType,
+            status: violations.status,
+            violationAt: violations.violationAt,
+            createdAt: violations.createdAt,
+          })
+          .from(violations)
+          .where(
+            and(
+              eq(violations.driverId, violation.driverId),
+              ne(violations.id, violation.id),
+            ),
+          )
+          .orderBy(desc(violations.violationAt))
+          .limit(5)
+      : [];
 
     const relatedViolations: RelatedViolation[] = relatedRows.map((row) => ({
       id: row.id,
@@ -257,46 +283,37 @@ export class ViolationsService {
         notificationStatus: violation.notificationStatus,
         lastNotifiedAt: violation.lastNotifiedAt,
         imageUrls: violation.imageUrls,
+        plateNumber: violation.plateNumber,
         violationAt: violation.violationAt,
         createdAt: violation.createdAt,
         updatedAt: violation.updatedAt,
       },
-      driver: {
-        id: violation.driverId,
-        fullName: violation.driverName,
-        email: violation.driverEmail,
-        phoneNumber: violation.driverPhone,
-        nationalId: violation.driverNationalId,
-        plateNumber: violation.driverPlate,
-        driverLicenseNumber: violation.driverLicense,
-      },
+      driver:
+        violation.driverId && violation.driverName
+          ? {
+              id: violation.driverId,
+              fullName: violation.driverName,
+              email: violation.driverEmail ?? "",
+              phoneNumber: violation.driverPhone ?? "",
+              nationalId: violation.driverNationalId ?? "",
+              plateNumber: violation.driverPlate ?? violation.plateNumber,
+              driverLicenseNumber: violation.driverLicense ?? "",
+            }
+          : null,
       relatedViolations,
       latestNotification,
     };
   }
 
   async createFromAi(payload: AiViolationPayload): Promise<AiViolationResult> {
-    const [driver] = await this.db
-      .select({
-        id: drivers.id,
-        fullName: drivers.fullName,
-        plateNumber: drivers.plateNumber,
-      })
-      .from(drivers)
-      .where(eq(drivers.plateNumber, payload.plateNumber))
-      .limit(1);
-
-    if (!driver) {
-      return {
-        status: "driver_not_found",
-        plateNumber: payload.plateNumber,
-      };
-    }
+    const plateNumber = this.normalizePlateNumber(payload.plateNumber);
+    const driver = await this.findDriverByPlateNumber(plateNumber);
 
     const [violation] = await this.db
       .insert(violations)
       .values({
-        driverId: driver.id,
+        driverId: driver?.id ?? null,
+        plateNumber,
         violationType: payload.violationType,
         imageUrls: payload.imageUrls,
         violationAt: new Date(payload.timestamp),
@@ -318,18 +335,18 @@ export class ViolationsService {
       throw new Error("Failed to create violation");
     }
 
-    const notification = await this.notificationsService.dispatchViolationNotice(
-      violation.id,
-    );
+    const notification = driver
+      ? await this.notificationsService.dispatchViolationNotice(violation.id)
+      : null;
 
     const listItem = this.mapListItem({
       id: violation.id,
-      driverId: driver.id,
-      driverName: driver.fullName,
-      plateNumber: driver.plateNumber,
+      driverId: driver?.id ?? null,
+      driverName: driver?.fullName ?? null,
+      plateNumber,
       violationType: violation.violationType,
-      status: notification.workflowStatus,
-      notificationStatus: notification.deliveryStatus,
+      status: notification?.workflowStatus ?? violation.status,
+      notificationStatus: notification?.deliveryStatus ?? violation.notificationStatus,
       imageUrls: violation.imageUrls,
       violationAt: violation.violationAt,
       createdAt: violation.createdAt,
@@ -340,10 +357,7 @@ export class ViolationsService {
       status: "created",
       driver,
       violation: listItem,
-      notification: {
-        deliveryStatus: notification.deliveryStatus,
-        failureReason: notification.failureReason,
-      },
+      notification,
     };
   }
 }

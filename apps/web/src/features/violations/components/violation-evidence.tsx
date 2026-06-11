@@ -7,10 +7,22 @@ import { ViolationStatusBadge } from "./violation-status-badge";
 
 type ViolationEvidenceProps = {
   violation: ViolationDetail["violation"];
-  driver: ViolationDriverDetail;
+  driver: ViolationDriverDetail | null;
+};
+
+const formatUnknownValue = (value: string | null | undefined) => {
+  const trimmed = value?.trim();
+  if (!trimmed || trimmed.toLowerCase() === "unknown") {
+    return "Unknown";
+  }
+
+  return trimmed;
 };
 
 export function ViolationEvidence({ violation, driver }: ViolationEvidenceProps) {
+  const driverName = driver?.fullName?.trim() || "Unknown Driver";
+  const plateNumber = formatUnknownValue(driver?.plateNumber ?? violation.plateNumber);
+
   return (
     <div className="space-y-4 rounded-xl border border-zinc-200/80 bg-white p-4 shadow-sm sm:p-5">
       <ViolationImageGallery imageUrls={violation.imageUrls} />
@@ -28,7 +40,7 @@ export function ViolationEvidence({ violation, driver }: ViolationEvidenceProps)
         <DetailItem label="Updated at" value={formatDateTime(violation.updatedAt)} />
         <DetailItem
           label="Driver"
-          value={`${driver.fullName} (${driver.plateNumber})`}
+          value={`${driverName} (${plateNumber})`}
         />
       </div>
     </div>

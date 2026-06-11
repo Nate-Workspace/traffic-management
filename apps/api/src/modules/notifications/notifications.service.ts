@@ -44,6 +44,8 @@ export class NotificationsService {
       await this.assertResendAllowed(violationId, context.lastNotifiedAt);
     }
 
+    const driverName = context.driverName?.trim() || "Unknown Driver";
+    const plateNumber = context.plateNumber?.trim() || "Unknown";
     const recipientEmail = context.driverEmail?.trim();
 
     if (!recipientEmail) {
@@ -56,8 +58,8 @@ export class NotificationsService {
     }
 
     const template = buildViolationNoticeEmail({
-      driverName: context.driverName,
-      plateNumber: context.plateNumber,
+      driverName,
+      plateNumber,
       violationType: context.violationType,
       violationTypeLabel:
         VIOLATION_TYPE_LABELS[context.violationType] ?? context.violationType,
@@ -141,7 +143,7 @@ export class NotificationsService {
         plateNumber: drivers.plateNumber,
       })
       .from(violations)
-      .innerJoin(drivers, eq(violations.driverId, drivers.id))
+      .leftJoin(drivers, eq(violations.driverId, drivers.id))
       .where(eq(violations.id, violationId))
       .limit(1);
 

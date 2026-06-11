@@ -3,7 +3,7 @@ import { createZodDto } from "@common/dto/zod.dto";
 import { violationTypeValues } from "../schema/violations.schema";
 
 export const createAiViolationSchema = z.object({
-  plateNumber: z.string().trim().min(3),
+  plateNumber: z.string().transform((value) => value.trim()),
   timestamp: z.string().datetime(),
   imageUrls: z.array(z.string().url()).default([]),
   violationType: z.enum(violationTypeValues),

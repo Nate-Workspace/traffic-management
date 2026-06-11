@@ -39,9 +39,10 @@ export const violations = pgTable(
   "violations",
   {
     id: uuidPrimaryKey(),
-    driverId: uuid("driver_id")
-      .notNull()
-      .references(() => drivers.id, { onDelete: "cascade" }),
+    driverId: uuid("driver_id").references(() => drivers.id, {
+      onDelete: "set null",
+    }),
+    plateNumber: text("plate_number").notNull(),
     violationType: violationTypeEnum("violation_type").notNull(),
     imageUrls: text("image_urls")
       .array()
@@ -57,6 +58,7 @@ export const violations = pgTable(
   },
   (table) => ({
     driverIdx: index("violations_driver_id_idx").on(table.driverId),
+    plateIdx: index("violations_plate_number_idx").on(table.plateNumber),
     statusIdx: index("violations_status_idx").on(table.status),
     typeIdx: index("violations_type_idx").on(table.violationType),
     violationAtIdx: index("violations_violation_at_idx").on(table.violationAt),

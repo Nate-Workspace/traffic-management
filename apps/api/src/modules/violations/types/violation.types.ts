@@ -5,6 +5,7 @@ import type {
   violationTypeValues,
 } from "../schema/violations.schema";
 import type { NotificationLogSummary } from "@modules/notifications/types/notification.types";
+import type { NotificationDispatchResult } from "@modules/notifications/types/notification.types";
 
 export type ViolationStatus = (typeof violationStatusValues)[number];
 export type ViolationType = (typeof violationTypeValues)[number];
@@ -36,10 +37,11 @@ export type ViolationListItem = {
   status: ViolationStatus;
   notificationStatus: NotificationDeliveryStatus;
   imageUrls: string[];
+  plateNumber: string;
   violationAt: Date;
   createdAt: Date;
   updatedAt: Date;
-  driver: ViolationDriverSummary;
+  driver: ViolationDriverSummary | null;
 };
 
 export type RelatedViolation = {
@@ -58,11 +60,12 @@ export type ViolationDetail = {
     notificationStatus: NotificationDeliveryStatus;
     lastNotifiedAt: Date | null;
     imageUrls: string[];
+    plateNumber: string;
     violationAt: Date;
     createdAt: Date;
     updatedAt: Date;
   };
-  driver: ViolationDriverDetail;
+  driver: ViolationDriverDetail | null;
   relatedViolations: RelatedViolation[];
   latestNotification: NotificationLogSummary | null;
 };
@@ -75,16 +78,9 @@ export type AiViolationPayload = {
 };
 
 export type AiViolationResult =
-  | {
-      status: "created";
-      violation: ViolationListItem;
-      driver: ViolationDriverSummary;
-      notification: {
-        deliveryStatus: NotificationDeliveryStatus;
-        failureReason: string | null;
-      };
-    }
-  | {
-      status: "driver_not_found";
-      plateNumber: string;
-    };
+  {
+    status: "created";
+    violation: ViolationListItem;
+    driver: ViolationDriverSummary | null;
+    notification: NotificationDispatchResult | null;
+  };

@@ -27,10 +27,14 @@ export function ViolationOperationsPanel({ data }: ViolationOperationsPanelProps
     violation.id,
   );
 
+  const recipientEmail = driver?.email?.trim() ?? null;
+  const recipientLabel = recipientEmail ?? "Not Available";
+
   const canResend =
-    violation.notificationStatus === "FAILED" ||
-    violation.notificationStatus === "SENT" ||
-    violation.notificationStatus === "NOT_SENT";
+    Boolean(recipientEmail) &&
+    (violation.notificationStatus === "FAILED" ||
+      violation.notificationStatus === "SENT" ||
+      violation.notificationStatus === "NOT_SENT");
 
   const handleResend = async () => {
     await toastPromise(
@@ -43,7 +47,7 @@ export function ViolationOperationsPanel({ data }: ViolationOperationsPanelProps
       {
         loading: {
           title: "Sending notification",
-          message: `Delivering notice to ${driver.email}`,
+          message: `Delivering notice to ${recipientLabel}`,
         },
         success: {
           title: "Notification sent",
@@ -110,7 +114,7 @@ export function ViolationOperationsPanel({ data }: ViolationOperationsPanelProps
                 : "—"
             }
           />
-          <DetailItem label="Recipient" value={driver.email} />
+          <DetailItem label="Recipient" value={recipientLabel} />
         </div>
 
         {latestNotification?.failureReason ? (

@@ -22,13 +22,16 @@ export type RecentViolation = {
   id: string;
   violationType: "RED_LIGHT";
   status: "PENDING" | "NOTIFIED" | "REVIEWED" | "DISMISSED";
+  plateNumber: string;
   violationAt: string;
   createdAt: string;
-  driver: {
-    id: string;
-    fullName: string;
-    plateNumber: string;
-  };
+  driver:
+    | {
+        id: string;
+        fullName: string;
+        plateNumber: string;
+      }
+    | null;
 };
 
 export type RecentViolationsResponse = AnalyticsStatic & {

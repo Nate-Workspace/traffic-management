@@ -52,10 +52,11 @@ export type ViolationListItem = {
   status: ViolationStatus;
   notificationStatus: NotificationDeliveryStatus;
   imageUrls: string[];
+  plateNumber: string;
   violationAt: string;
   createdAt: string;
   updatedAt: string;
-  driver: ViolationDriverSummary;
+  driver: ViolationDriverSummary | null;
 };
 
 export type RelatedViolation = {
@@ -74,11 +75,12 @@ export type ViolationDetail = {
     notificationStatus: NotificationDeliveryStatus;
     lastNotifiedAt: string | null;
     imageUrls: string[];
+    plateNumber: string;
     violationAt: string;
     createdAt: string;
     updatedAt: string;
   };
-  driver: ViolationDriverDetail;
+  driver: ViolationDriverDetail | null;
   relatedViolations: RelatedViolation[];
   latestNotification: NotificationLogSummary | null;
 };

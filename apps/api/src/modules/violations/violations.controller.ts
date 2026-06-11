@@ -7,6 +7,7 @@ import { IdParamDto } from "@common/dto/id-param.dto";
 import { CreateAiViolationDto } from "./dto/create-ai-violation.dto";
 import { NotificationsService } from "@modules/notifications/notifications.service";
 import { ViolationWorkflowService } from "@modules/notifications/violation-workflow.service";
+import { Public } from "@common/decorators/public.decorator";
 
 @Controller({ path: "violations", version: "1" })
 export class ViolationsController {
@@ -16,6 +17,7 @@ export class ViolationsController {
     private readonly workflowService: ViolationWorkflowService,
   ) {}
 
+  @Public()
   @Post()
   create(@Body() payload: CreateViolationDto) {
     return this.violationsService.create(payload);
