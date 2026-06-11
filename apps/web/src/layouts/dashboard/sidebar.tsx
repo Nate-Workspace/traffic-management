@@ -22,16 +22,16 @@ export function Sidebar({ className, onNavigate }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-full w-full flex-col bg-white/95 px-3 py-5 backdrop-blur-sm",
+        "flex h-full w-full flex-col bg-white/95 px-3 py-5 pt-3 backdrop-blur-sm",
         className,
       )}
     >
       <div className="shrink-0 px-2">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-zinc-400">
+        {/* <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-zinc-400">
           Traffic Ops
-        </p>
-        <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-zinc-900">
-          Console
+        </p> */}
+        <p className="mt-1.5 text-[20px] font-semibold tracking-tight text-zinc-900">
+          Traffic Ops
         </p>
       </div>
 
