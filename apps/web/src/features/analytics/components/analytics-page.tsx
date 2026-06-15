@@ -38,7 +38,7 @@ export function AnalyticsPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="page-header">
-          <h1 className="page-title">Analytics dashboard</h1>
+          <h1 className="page-title">Dashboard</h1>
           <p className="page-description">
             Monitor the system's health, incident trends, and repeated offenders and more.
           </p>
